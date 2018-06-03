@@ -69,7 +69,6 @@ namespace SalesAdminPortal.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            ViewBag.HostName = _hostName;
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
