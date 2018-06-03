@@ -53,28 +53,28 @@ namespace SalesAdminPortal
                     ));
 
             //Login Bundle
-            bundles.Add(new StyleBundle("~/SalesAdminPortal_deploy/Content/login").Include(
-                      "~/SalesAdminPortal_deploy/Content/bootstrap.css",
-                      "~/SalesAdminPortal_deploy/Content/Login/main.css",
-                      "~/SalesAdminPortal_deploy/Content/Login/util.css",
-                      "~/SalesAdminPortal_deploy/fonts/font-awesome-4.7.0/css/font-awesome.min.css",
-                      "~/SalesAdminPortal_deploy/fonts/iconic/css/material-design-iconic-font.min.css",
-                      "~/SalesAdminPortal_deploy/Content/vendor/animate/animate.css",
-                      "~/SalesAdminPortal_deploy/Content/vendor/css-hamburgers/hamburgers.min.css",
-                      "~/SalesAdminPortal_deploy/Content/vendor/animsition/css/animsition.min.css",
-                      "~/SalesAdminPortal_deploy/Content/vendor/select2/select2.min.css",
-                      "~/SalesAdminPortal_deploy/Content/vendor/daterangepicker/daterangepicker.css"
+            bundles.Add(new StyleBundle("~/Content/login-rel").Include(
+                      "~/salesadmin/Content/bootstrap.css",
+                      "~/salesadmin/Content/Login/main.css",
+                      "~/salesadmin/Content/Login/util.css",
+                      "~/salesadmin/fonts/font-awesome-4.7.0/css/font-awesome.min.css",
+                      "~/salesadmin/fonts/iconic/css/material-design-iconic-font.min.css",
+                      "~/salesadmin/Content/vendor/animate/animate.css",
+                      "~/salesadmin/Content/vendor/css-hamburgers/hamburgers.min.css",
+                      "~/salesadmin/Content/vendor/animsition/css/animsition.min.css",
+                      "~/salesadmin/Content/vendor/select2/select2.min.css",
+                      "~/salesadmin/Content/vendor/daterangepicker/daterangepicker.css"
                     ));
-            bundles.Add(new ScriptBundle("~/SalesAdminPortal_deploy/Scripts/login").Include(
-                      "~/SalesAdminPortal_deploy/Content/vendor/jquery/jquery-3.2.1.min.js",
-                      "~/SalesAdminPortal_deploy/Content/vendor/animsition/js/animsition.min.js",
-                      "~/SalesAdminPortal_deploy/Content/vendor/bootstrap/js/popper.js",
-                      "~/SalesAdminPortal_deploy/Content/vendor/bootstrap/js/bootstrap.min.js",
-                      "~/SalesAdminPortal_deploy/Content/vendor/select2/select2.min.js",
-                      "~/SalesAdminPortal_deploy/Content/vendor/daterangepicker/moment.min.js",
-                      "~/SalesAdminPortal_deploy/Content/vendor/daterangepicker/daterangepicker.js",
-                      "~/SalesAdminPortal_deploy/Content/vendor/countdowntime/countdowntime.js",
-                      "~/SalesAdminPortal_deploy/Scripts/Login/main.js"
+            bundles.Add(new ScriptBundle("~/Scripts/login-rel").Include(
+                      "~/salesadmin/Content/vendor/jquery/jquery-3.2.1.min.js",
+                      "~/salesadmin/Content/vendor/animsition/js/animsition.min.js",
+                      "~/salesadmin/Content/vendor/bootstrap/js/popper.js",
+                      "~/salesadmin/Content/vendor/bootstrap/js/bootstrap.min.js",
+                      "~/salesadmin/Content/vendor/select2/select2.min.js",
+                      "~/salesadmin/Content/vendor/daterangepicker/moment.min.js",
+                      "~/salesadmin/Content/vendor/daterangepicker/daterangepicker.js",
+                      "~/salesadmin/Content/vendor/countdowntime/countdowntime.js",
+                      "~/salesadmin/Scripts/Login/main.js"
                     ));
         }
     }
