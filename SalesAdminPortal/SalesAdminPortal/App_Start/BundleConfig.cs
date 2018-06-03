@@ -53,7 +53,7 @@ namespace SalesAdminPortal
                     ));
 
             //Login Bundle
-            bundles.Add(new StyleBundle("~/Relase/Content/login").Include(
+            bundles.Add(new StyleBundle("~/SalesAdminPortal_deploy/Content/login").Include(
                       "~/SalesAdminPortal_deploy/Content/bootstrap.css",
                       "~/SalesAdminPortal_deploy/Content/Login/main.css",
                       "~/SalesAdminPortal_deploy/Content/Login/util.css",
@@ -65,7 +65,7 @@ namespace SalesAdminPortal
                       "~/SalesAdminPortal_deploy/Content/vendor/select2/select2.min.css",
                       "~/SalesAdminPortal_deploy/Content/vendor/daterangepicker/daterangepicker.css"
                     ));
-            bundles.Add(new ScriptBundle("~/Release/Scripts/login").Include(
+            bundles.Add(new ScriptBundle("~/SalesAdminPortal_deploy/Scripts/login").Include(
                       "~/SalesAdminPortal_deploy/Content/vendor/jquery/jquery-3.2.1.min.js",
                       "~/SalesAdminPortal_deploy/Content/vendor/animsition/js/animsition.min.js",
                       "~/SalesAdminPortal_deploy/Content/vendor/bootstrap/js/popper.js",
