@@ -10,6 +10,7 @@ namespace SalesAdminPortal.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = true;
+            AutomaticMigrationDataLossAllowed = true;
             ContextKey = "SalesAdminPortal.Models.ApplicationDbContext";
         }
 
