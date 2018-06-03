@@ -3,6 +3,15 @@
 @{
     ViewBag.Title = "Log in";
     Layout = null;
+    string backgroundImage = string.Empty;
+    if (ViewBag.HostName == "LOCAL_ENV")
+    {
+        backgroundImage = "../../Images/background.jpg";
+    }
+    else
+    {
+        backgroundImage = "../../../Images/background.jpg";
+    }
 }
 
 <!DOCTYPE html>
@@ -11,44 +20,51 @@
     <title>@ViewBag.Title</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    @Styles.Render("~/Content/css")
-    @Styles.Render("~/Content/login")
+    @if (ViewBag.HostName == "LOCAL_ENV")
+    {
+        @Styles.Render("~/Content/css")
+        @Styles.Render("~/Content/login")
+    }
+    else
+    {
+        @Styles.Render("~/Relase/Content/login")
+    }
 </head>
 <body>
 
     <div class="limiter">
-        <div class="container-login100" style="background-image: url('../../Images/background.jpg');">
+        <div class="container-login100" style="background-image: url('@backgroundImage');">
             <div class="wrap-login100">
                 @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "login100-form validate-form", role = "form", @autocomplete = "off" }))
                 {
                     @Html.AntiForgeryToken()
-                <span class="login100-form-title p-b-34 p-t-27">
-                    Log in
-                    <br />
-                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                </span>
+                    <span class="login100-form-title p-b-34 p-t-27">
+                        Log in
+                        <br />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    </span>
 
-                <div class="wrap-input100 validate-input" data-validate="Enter username">
-                    @Html.TextBoxFor(m => m.Email, new { @class = "input100", @autocomplete="off", @name = "username", @placeholder = "Username" })
-                    <span class="focus-input100" data-placeholder="&#xf207;"></span>
-                </div>
+                    <div class="wrap-input100 validate-input" data-validate="Enter username">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "input100", @autocomplete = "off", @name = "username", @placeholder = "Username" })
+                        <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                    </div>
 
-                <div class="wrap-input100 validate-input" data-validate="Enter password">
-                    @Html.PasswordFor(m => m.Password, new { @class = "input100", @autocomplete = "off", @name = "pass", @placeholder = "Password" })
-                    <span class="focus-input100" data-placeholder="&#xf191;"></span>
-                </div>
+                    <div class="wrap-input100 validate-input" data-validate="Enter password">
+                        @Html.PasswordFor(m => m.Password, new { @class = "input100", @autocomplete = "off", @name = "pass", @placeholder = "Password" })
+                        <span class="focus-input100" data-placeholder="&#xf191;"></span>
+                    </div>
 
-                <div class="contact100-form-checkbox">
-                    @Html.CheckBoxFor(m => m.RememberMe, new { @class = "input-checkbox100" })
-                    @Html.LabelFor(m => m.RememberMe, new{ @class = "label-checkbox100" })
-                </div>
+                    <div class="contact100-form-checkbox">
+                        @Html.CheckBoxFor(m => m.RememberMe, new { @class = "input-checkbox100" })
+                        @Html.LabelFor(m => m.RememberMe, new { @class = "label-checkbox100" })
+                    </div>
 
                     <div class="container-login100-form-btn">
                         <button class="login100-form-btn">
                             Login
                         </button>
                     </div>
-                    
+
                 }
             </div>
         </div>
@@ -58,5 +74,12 @@
 </html>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/Scripts/login")
+    @if (ViewBag.HostName == "LOCAL_ENV")
+    {
+        @Scripts.Render("~/Scripts/login")
+    }
+    else
+    {
+        @Scripts.Render("~/Release/Scripts/login")
+    }
 }

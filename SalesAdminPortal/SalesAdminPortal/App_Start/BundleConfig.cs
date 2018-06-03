@@ -51,6 +51,31 @@ namespace SalesAdminPortal
                       "~/Content/vendor/countdowntime/countdowntime.js",
                       "~/Scripts/Login/main.js"
                     ));
+
+            //Login Bundle
+            bundles.Add(new StyleBundle("~/Relase/Content/login").Include(
+                      "~/SalesAdminPortal_deploy/Content/bootstrap.css",
+                      "~/SalesAdminPortal_deploy/Content/Login/main.css",
+                      "~/SalesAdminPortal_deploy/Content/Login/util.css",
+                      "~/SalesAdminPortal_deploy/fonts/font-awesome-4.7.0/css/font-awesome.min.css",
+                      "~/SalesAdminPortal_deploy/fonts/iconic/css/material-design-iconic-font.min.css",
+                      "~/SalesAdminPortal_deploy/Content/vendor/animate/animate.css",
+                      "~/SalesAdminPortal_deploy/Content/vendor/css-hamburgers/hamburgers.min.css",
+                      "~/SalesAdminPortal_deploy/Content/vendor/animsition/css/animsition.min.css",
+                      "~/SalesAdminPortal_deploy/Content/vendor/select2/select2.min.css",
+                      "~/SalesAdminPortal_deploy/Content/vendor/daterangepicker/daterangepicker.css"
+                    ));
+            bundles.Add(new ScriptBundle("~/Release/Scripts/login").Include(
+                      "~/SalesAdminPortal_deploy/Content/vendor/jquery/jquery-3.2.1.min.js",
+                      "~/SalesAdminPortal_deploy/Content/vendor/animsition/js/animsition.min.js",
+                      "~/SalesAdminPortal_deploy/Content/vendor/bootstrap/js/popper.js",
+                      "~/SalesAdminPortal_deploy/Content/vendor/bootstrap/js/bootstrap.min.js",
+                      "~/SalesAdminPortal_deploy/Content/vendor/select2/select2.min.js",
+                      "~/SalesAdminPortal_deploy/Content/vendor/daterangepicker/moment.min.js",
+                      "~/SalesAdminPortal_deploy/Content/vendor/daterangepicker/daterangepicker.js",
+                      "~/SalesAdminPortal_deploy/Content/vendor/countdowntime/countdowntime.js",
+                      "~/SalesAdminPortal_deploy/Scripts/Login/main.js"
+                    ));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -17,6 +18,7 @@ namespace SalesAdminPortal.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private string _hostName;
 
         public AccountController()
         {
@@ -52,11 +54,22 @@ namespace SalesAdminPortal.Controllers
             }
         }
 
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            base.OnActionExecuting(filterContext);
+            Debug.Print("Host:" + Request.Url.Host); // Accessible here
+            if (Request.Url.Host == "localhost")
+            {
+                _hostName = "LOCAL_ENV";
+            }
+        }
+
         //
         // GET: /Account/Login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            ViewBag.HostName = _hostName;
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
