@@ -4,14 +4,15 @@
     ViewBag.Title = "Log in";
     Layout = null;
     string backgroundImage = string.Empty;
-    if (ViewBag.HostName == "LOCAL_ENV")
-    {
-        backgroundImage = "../../Images/background.jpg";
-    }
-    else
-    {
-        backgroundImage = "../salesadmin/Images/background.jpg";
-    }
+    //if (ViewBag.HostName == "LOCAL_ENV")
+    //{
+    //    backgroundImage = "../../Images/background.jpg";
+    //}
+    //else
+    //{
+    //    backgroundImage = "../Images/background.jpg";
+    //}
+    backgroundImage = "../Images/background.jpg";
 }
 
 <!DOCTYPE html>
@@ -20,16 +21,16 @@
     <title>@ViewBag.Title</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    @if (ViewBag.HostName == "LOCAL_ENV")
-    {
+    @*@if (ViewBag.HostName == "LOCAL_ENV")
+    {*@
         @Styles.Render("~/Content/css")
         @Styles.Render("~/Content/login")
-    }
-    else
-    {
-        @Styles.Render("~/Content/login-rel")
-    }
-</head>
+        @*}
+            else
+            {
+                @Styles.Render("~/Content/login-rel")
+            }*@
+    </head>
 <body>
 
     <div class="limiter">
@@ -74,12 +75,12 @@
 </html>
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
-    @if (ViewBag.HostName == "LOCAL_ENV")
-    {
+    @*@if (ViewBag.HostName == "LOCAL_ENV")
+    {*@
         @Scripts.Render("~/Scripts/login")
-    }
+    @*}
     else
     {
         @Scripts.Render("~/Scripts/login-rel")
-    }
+    }*@
 }
