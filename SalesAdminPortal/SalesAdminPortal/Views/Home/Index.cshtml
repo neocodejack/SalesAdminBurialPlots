@@ -1,4 +1,30 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
-sample Coupon Code: @ViewBag.name
+
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<input type="button" id="btnCoupon" name="btnCoupon" value="Generate Coupon" />
+<input type="text" id="txtGeneratedCoupon" readonly="readonly" />
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnCoupon").click(function () {
+            $.ajax({
+                type: "GET",
+                async: false,
+                url: "/coupon/getcouponasync",
+                contentType: "application/json",
+                success: function (response) {
+                    $("#txtGeneratedCoupon").val(response.Result);
+                }
+            })
+        });
+    });
+
+</script>
