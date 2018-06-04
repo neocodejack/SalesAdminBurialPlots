@@ -18,7 +18,7 @@
             $.ajax({
                 type: "GET",
                 async: false,
-                url: "/coupon/getcouponasync",
+                url: "@Url.Action("GetCouponAsync", "Coupon")",
                 contentType: "application/json",
                 success: function (response) {
                     $("#txtGeneratedCoupon").val(response.Result);
