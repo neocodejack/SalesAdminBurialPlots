@@ -1,10 +1,10 @@
 ﻿using CouponCode;
 using System.Threading.Tasks;
-using System.Web.Http;
+using System.Web.Mvc;
 
 namespace SalesAdminPortal.Controllers
 {
-    public class CouponController : ApiController
+    public class CouponController : Controller
     {
         private readonly Options _opts = null;
         private CouponCodeBuilder _ccb = null;
@@ -21,10 +21,10 @@ namespace SalesAdminPortal.Controllers
             _ccb = new CouponCodeBuilder();
         }
 
-        [Route("api/coupon/")]
+        
         [HttpGet]
         [Authorize]
-        public async Task<IHttpActionResult> GetCouponAsync()
+        public async Task<ActionResult> GetCouponAsync()
         {
             var tcs = new TaskCompletionSource<string>();
             await Task.Run(() =>
@@ -33,12 +33,12 @@ namespace SalesAdminPortal.Controllers
                  tcs.SetResult(couponCode);
              });
 
-            return Ok(tcs.Task);
+            return Json(tcs.Task, JsonRequestBehavior.AllowGet);
         }
         
         [Route("api/coupon/{coupon}")]
         [HttpGet]
-        public async Task<IHttpActionResult> ValidateCouponAsync(string coupon)
+        public async Task<ActionResult> ValidateCouponAsync(string coupon)
         {
             var tcs = new TaskCompletionSource<bool>();
             await Task.Run(() =>
@@ -56,7 +56,7 @@ namespace SalesAdminPortal.Controllers
                 tcs.SetResult(isValidCode);
             });
 
-            return Ok(tcs.Task);
+            return Json(tcs.Task, JsonRequestBehavior.AllowGet);
         }
     }
 }
