@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.27428.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalesAdminPortal", "SalesAdminPortal\SalesAdminPortal.csproj", "{CA89857D-B86B-4CE3-8E0B-E07DAF71B368}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CouponCode", "CouponCode\CouponCode.csproj", "{1A5C8E04-1CC8-456F-8E78-0BF205A09E0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CouponCode.Tests", "CouponCode.Tests\CouponCode.Tests.csproj", "{AF7048D3-0314-408F-8563-4C28C573BE5B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{CA89857D-B86B-4CE3-8E0B-E07DAF71B368}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA89857D-B86B-4CE3-8E0B-E07DAF71B368}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA89857D-B86B-4CE3-8E0B-E07DAF71B368}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A5C8E04-1CC8-456F-8E78-0BF205A09E0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A5C8E04-1CC8-456F-8E78-0BF205A09E0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A5C8E04-1CC8-456F-8E78-0BF205A09E0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A5C8E04-1CC8-456F-8E78-0BF205A09E0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF7048D3-0314-408F-8563-4C28C573BE5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF7048D3-0314-408F-8563-4C28C573BE5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF7048D3-0314-408F-8563-4C28C573BE5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF7048D3-0314-408F-8563-4C28C573BE5B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
