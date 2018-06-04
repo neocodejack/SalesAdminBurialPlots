@@ -23,7 +23,7 @@ namespace SalesAdminPortal.Controllers
 
         [Route("api/coupon/")]
         [HttpGet]
-        //[Authorize]
+        [Authorize]
         public async Task<IHttpActionResult> GetCouponAsync()
         {
             var tcs = new TaskCompletionSource<string>();
