@@ -13,10 +13,6 @@ namespace SalesAdminPortal.Controllers
     {
         public ActionResult Index()
         {
-            var client = new HttpClient();
-            var response = client.GetAsync("http://185.197.61.184/salesadmin/api/coupon").Result;
-            var coupon = response.Content.ReadAsStringAsync();
-            ViewBag.Coupon = coupon;
             return View();
         }
 
