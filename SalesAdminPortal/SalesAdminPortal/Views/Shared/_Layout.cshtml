@@ -1,44 +1,154 @@
-﻿<!DOCTYPE html>
+﻿@using SalesAdminPortal.Helpers
+
+<!DOCTYPE>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
-    @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+    <title>Agency Sales Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    @Styles.Render("~/Content/layout")
+    @Scripts.Render("~/Scripts/layout")
+
+    <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+    <section id="container">
+        <!--header start-->
+        <header class="header fixed-top clearfix">
+            <!--logo start-->
+            <div class="brand">
+                <img src="~/Images/logo.png" style="width: 205px;margin-left: 9px;margin-top: 19px;">
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
-        </div>
-    </div>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-        </footer>
-    </div>
+            <!--logo end-->
+            <div class="nav notify-row" id="top_menu">
 
-    
+            </div>
+            <div class="top-nav clearfix">
+                <!--search & user info start-->
+                <ul class="nav pull-right top-menu">
+                    <!-- user login dropdown start-->
+                    <li class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                            <img alt="" src="~/Images/image1.png">
+                            <span class="username">Hello @User.Identity.GetName()</span>
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu extended logout">
+                            <li><a href="#"><i class=" fa fa-suitcase"></i>Profile</a></li>
+                            <li><a href="#"><i class="fa fa-cog"></i> Settings</a></li>
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()"><i class="fa fa-key"></i> Log Out</a></li>
+                        </ul>
+                    </li>
+
+                </ul>
+
+            </div>
+        </header>
+
+        <aside>
+            <div id="sidebar" class="nav-collapse">
+
+                <div class="leftside-navigation">
+                    <ul class="sidebar-menu" id="nav-accordion">
+                        <li>
+                            <a class="active" href="@Url.Action("Index","Home")">
+                                <i class="fa fa-dashboard"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+
+                        <li class="sub-menu">
+                            <a href="javascript:;">
+                                <i class="fa fa-book"></i>
+                                <span>Coupon</span>
+                            </a>
+                            <ul class="sub">
+                                <li><a href="@Url.Action("Create","Coupon")">Create New</a></li>
+                                <li><a href="#">Generated Coupons</a></li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+
+            </div>
+        </aside>
+
+        <section id="main-content">
+            <section class="wrapper">
+                <!-- //market-->
+                <div class="market-updates">
+                    <div class="col-md-3 market-update-gd">
+                        <div class="market-update-block clr-block-2">
+                            <div class="col-md-4 market-update-right">
+                                <i class="fa fa-eye"> </i>
+                            </div>
+                            <div class="col-md-8 market-update-left">
+                                <h4>Visitors</h4>
+                                <h3>13,500</h3>
+                                <p>Other hand, we denounce</p>
+                            </div>
+                            <div class="clearfix"> </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 market-update-gd">
+                        <div class="market-update-block clr-block-1">
+                            <div class="col-md-4 market-update-right">
+                                <i class="fa fa-users"></i>
+                            </div>
+                            <div class="col-md-8 market-update-left">
+                                <h4>Users</h4>
+                                <h3>1,250</h3>
+                                <p>Other hand, we denounce</p>
+                            </div>
+                            <div class="clearfix"> </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 market-update-gd">
+                        <div class="market-update-block clr-block-3">
+                            <div class="col-md-4 market-update-right">
+                                <i class="fa fa-usd"></i>
+                            </div>
+                            <div class="col-md-8 market-update-left">
+                                <h4>Sales</h4>
+                                <h3>1,500</h3>
+                                <p>Other hand, we denounce</p>
+                            </div>
+                            <div class="clearfix"> </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 market-update-gd">
+                        <div class="market-update-block clr-block-4">
+                            <div class="col-md-4 market-update-right">
+                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                            </div>
+                            <div class="col-md-8 market-update-left">
+                                <h4>Orders</h4>
+                                <h3>1,500</h3>
+                                <p>Other hand, we denounce</p>
+                            </div>
+                            <div class="clearfix"> </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"> </div>
+                </div>
+
+                @RenderBody()
+                <!-- footer -->
+                <div class="footer">
+                    <div class="wthree-copyright">
+                        <p>© 2018 </p>
+                    </div>
+                </div>
+                <!-- / footer -->
+            </section>
+            <!--main content end-->
+        </section>
+
 </body>
 </html>
+@using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+{
+@Html.AntiForgeryToken()
+}

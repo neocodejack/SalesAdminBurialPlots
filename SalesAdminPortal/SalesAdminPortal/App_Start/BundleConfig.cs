@@ -52,6 +52,26 @@ namespace SalesAdminPortal
                       "~/Scripts/Login/main.js"
                     ));
 
+            bundles.Add(new StyleBundle("~/Content/layout").Include(
+                        "~/Content/bootstrap.min.css",
+                        "~/Content/Layout/style.css",
+                        "~/Content/Layout/style-responsive.css",
+                        "~/Content/Layout/font.css",
+                        "~/Content/Layout/font-awesome.css",
+                        "~/Content/Layout/morris.css",
+                        "~/Content/Layout/monthly.css"
+                    ));
+            bundles.Add(new ScriptBundle("~/Scripts/layout").Include(
+                        "~/Scripts/Layout/jquery2.0.3.min.js",
+                        "~/Scripts/Layout/raphael-min.js",
+                        "~/Scripts/Layout/morris.js",
+                        "~/Scripts/Layout/bootstrap.js",
+                        "~/Scripts/Layout/jquery.dcjqaccordion.2.7.js",
+                        "~/Scripts/Layout/scripts.js",
+                        "~/Scripts/Layout/jquery.slimscroll.js",
+                        "~/Scripts/Layout/jquery.nicescroll.js",
+                        "~/Scripts/Layout/jquery.scrollTo.js"
+                    ));
         }
     }
 }

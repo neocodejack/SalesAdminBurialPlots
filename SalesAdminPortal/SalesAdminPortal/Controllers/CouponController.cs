@@ -21,6 +21,12 @@ namespace SalesAdminPortal.Controllers
             _ccb = new CouponCodeBuilder();
         }
 
+        [HttpGet]
+        [Authorize]
+        public ActionResult Create()
+        {
+            return View();
+        }
         
         [HttpGet]
         [Authorize]

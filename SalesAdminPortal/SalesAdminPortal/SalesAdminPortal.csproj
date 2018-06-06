@@ -217,6 +217,15 @@
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Layout\font-awesome.css" />
+    <Content Include="Content\Layout\font.css" />
+    <Content Include="Content\Layout\jqvmap.css" />
+    <Content Include="Content\Layout\lightbox.css" />
+    <Content Include="Content\Layout\minimal.css" />
+    <Content Include="Content\Layout\monthly.css" />
+    <Content Include="Content\Layout\morris.css" />
+    <Content Include="Content\Layout\style-responsive.css" />
+    <Content Include="Content\Layout\style.css" />
     <Content Include="Content\Login\main.css" />
     <Content Include="Content\Login\util.css" />
     <Content Include="Content\vendor\animate\animate.css" />
@@ -254,6 +263,7 @@
     <Content Include="fonts\font-awesome-4.7.0\css\font-awesome.min.css" />
     <Content Include="fonts\font-awesome-4.7.0\fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\font-awesome-4.7.0\HELP-US-OUT.txt" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="fonts\iconic\css\material-design-iconic-font.css" />
     <Content Include="fonts\iconic\css\material-design-iconic-font.min.css" />
@@ -261,6 +271,17 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\background.jpeg" />
+    <Content Include="Images\bg.jpg" />
+    <Content Include="Images\close.png" />
+    <Content Include="Images\image1.png" />
+    <Content Include="Images\logo.png" />
+    <Content Include="Images\mail.png" />
+    <Content Include="Images\minimal.png" />
+    <Content Include="Images\nav-expand.png" />
+    <Content Include="Images\next.png" />
+    <Content Include="Images\pass.png" />
+    <Content Include="Images\prev.png" />
+    <Content Include="Images\search-icon.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
@@ -327,6 +348,11 @@
     <Content Include="Content\vendor\bootstrap\css\bootstrap-reboot.min.css.map" />
     <Content Include="Content\vendor\bootstrap\css\bootstrap.css.map" />
     <Content Include="Content\vendor\bootstrap\css\bootstrap.min.css.map" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\fontawesome-webfont.ttf" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\fontawesome-webfont.woff2" />
+    <Content Include="fonts\FontAwesome.otf" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
@@ -337,6 +363,25 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\Layout\bootstrap.js" />
+    <Content Include="Scripts\Layout\jquery.dcjqaccordion.2.7.js" />
+    <Content Include="Scripts\Layout\jquery.fileupload.js" />
+    <Content Include="Scripts\Layout\jquery.nicescroll.js" />
+    <Content Include="Scripts\Layout\jquery.scrollTo.js" />
+    <Content Include="Scripts\Layout\jquery.slimscroll.js" />
+    <Content Include="Scripts\Layout\jquery.vmap.asia.js" />
+    <Content Include="Scripts\Layout\jquery.vmap.australia.js" />
+    <Content Include="Scripts\Layout\jquery.vmap.europe.js" />
+    <Content Include="Scripts\Layout\jquery.vmap.js" />
+    <Content Include="Scripts\Layout\jquery.vmap.sampledata.js" />
+    <Content Include="Scripts\Layout\jquery.vmap.world.js" />
+    <Content Include="Scripts\Layout\jquery2.0.3.min.js" />
+    <Content Include="Scripts\Layout\lightbox-plus-jquery.min.js" />
+    <Content Include="Scripts\Layout\monthly.js" />
+    <Content Include="Scripts\Layout\morris.js" />
+    <Content Include="Scripts\Layout\raphael-min.js" />
+    <Content Include="Scripts\Layout\script.js" />
+    <Content Include="Scripts\Layout\scripts.js" />
     <Content Include="Scripts\Login\main.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
@@ -375,6 +420,7 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Coupon\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
