@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using SalesAdminPortal.Helpers;
 using SalesAdminPortal.Models;
 
 namespace SalesAdminPortal.Controllers
@@ -157,13 +158,31 @@ namespace SalesAdminPortal.Controllers
         //
         // POST: /Account/Register
         [HttpPost]
-        [AllowAnonymous]
+        [Authorize]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Name = model.Name };
+                //Generating Agent Code
+                //Getting master agent code
+                var masterAgentCode = User.Identity.GetAgentCode();
+                if (string.IsNullOrEmpty(masterAgentCode))
+                {
+                    //Checking if system admin is trying to add master users
+                    
+                }
+
+                var totalUsers = 0;
+                using(ApplicationDbContext context = new ApplicationDbContext())
+                {
+                    totalUsers = context.Users.Count(r => r.AgentCode.StartsWith(masterAgentCode));
+                }
+
+                //Updated Agent Code
+                masterAgentCode = masterAgentCode + "-" + totalUsers.ToString();
+
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Name = model.Name, AgentCode = masterAgentCode };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

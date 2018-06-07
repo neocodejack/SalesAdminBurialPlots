@@ -83,6 +83,7 @@ namespace SalesAdminPortal.Models
         [Required]
         [Display(Name = "Name")]
         public string Name { get; set; }
+
     }
 
     public class ResetPasswordViewModel
