@@ -16,10 +16,38 @@ namespace SalesAdminPortal.Helpers
             {
                 throw new ArgumentNullException("identity");
             }
-            var ci = identity as ClaimsIdentity;
-            if (ci != null)
+
+            if (identity is ClaimsIdentity ci)
             {
                 return ci.FindFirstValue("Name");
+            }
+            return null;
+        }
+
+        public static string GetAgentCode(this IIdentity identity)
+        {
+            if(identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+
+            if(identity is ClaimsIdentity ci)
+            {
+                return ci.FindFirstValue("AgentCode");
+            }
+            return null;
+        }
+
+        public static bool? GetAccountType(this IIdentity identity)
+        {
+            if(identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+
+            if(identity is ClaimsIdentity ci)
+            {
+                return Convert.ToBoolean(ci.FindFirstValue("IsMasterAgent"));
             }
             return null;
         }
