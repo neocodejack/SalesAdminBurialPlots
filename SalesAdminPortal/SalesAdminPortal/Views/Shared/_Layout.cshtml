@@ -22,7 +22,7 @@
             </div>
             <!--logo end-->
             <div class="nav notify-row" id="top_menu">
-
+                <h4 style="font-weight: bold;">Your Agent Code is: <span style="color: #FF0000;"> @User.Identity.GetAgentCode()</span></h4>
             </div>
             <div class="top-nav clearfix">
                 <!--search & user info start-->
@@ -36,7 +36,6 @@
                         </a>
                         <ul class="dropdown-menu extended logout">
                             <li><a href="#"><i class=" fa fa-suitcase"></i>Profile</a></li>
-                            <li><a href="#"><i class="fa fa-cog"></i> Settings</a></li>
                             <li><a href="javascript:document.getElementById('logoutForm').submit()"><i class="fa fa-key"></i> Log Out</a></li>
                         </ul>
                     </li>
@@ -61,14 +60,30 @@
                         <li class="sub-menu">
                             <a href="javascript:;">
                                 <i class="fa fa-book"></i>
-                                <span>Coupon</span>
+                                <span>Sales Insights</span>
                             </a>
                             <ul class="sub">
-                                <li><a href="@Url.Action("Create","Coupon")">Create New</a></li>
-                                <li><a href="#">Generated Coupons</a></li>
+                                <li><a href="#">Commision Earned</a></li>
+                                <li><a href="#">Sale Dashboard</a></li>
                             </ul>
                         </li>
-
+                        @if (User.Identity.GetAccountType().Equals("SM"))
+                        {
+                        <li class="sub-menu">
+                            <a href="javascript:;">
+                                <i class="fa fa-users"></i>
+                                <span>User Management</span>
+                            </a>
+                            <ul class="sub">
+                                <li>
+                                    <a href="@Url.Action("Register", "Account")">Add Sales Agent</a>
+                                </li>
+                                <li>
+                                    <a href="#">Manage Sales Agent</a>
+                                </li>
+                            </ul>
+                        </li>
+                        }
                     </ul>
                 </div>
 
@@ -78,7 +93,7 @@
         <section id="main-content">
             <section class="wrapper">
                 <!-- //market-->
-                <div class="market-updates">
+                @*<div class="market-updates">
                     <div class="col-md-3 market-update-gd">
                         <div class="market-update-block clr-block-2">
                             <div class="col-md-4 market-update-right">
@@ -132,13 +147,13 @@
                         </div>
                     </div>
                     <div class="clearfix"> </div>
-                </div>
+                </div>*@
 
                 @RenderBody()
                 <!-- footer -->
-                <div class="footer">
+                <div class="footer" style="margin-top:100px">
                     <div class="wthree-copyright">
-                        <p>© 2018 </p>
+                        <p>© 2018 BurialPlots.co.uk</p>
                     </div>
                 </div>
                 <!-- / footer -->
@@ -150,5 +165,5 @@
 </html>
 @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
 {
-@Html.AntiForgeryToken()
+    @Html.AntiForgeryToken()
 }
