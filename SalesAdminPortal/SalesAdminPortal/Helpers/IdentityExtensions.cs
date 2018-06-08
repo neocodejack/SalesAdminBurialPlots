@@ -38,7 +38,7 @@ namespace SalesAdminPortal.Helpers
             return null;
         }
 
-        public static bool? GetAccountType(this IIdentity identity)
+        public static string GetAccountType(this IIdentity identity)
         {
             if(identity == null)
             {
@@ -47,7 +47,7 @@ namespace SalesAdminPortal.Helpers
 
             if(identity is ClaimsIdentity ci)
             {
-                return Convert.ToBoolean(ci.FindFirstValue("IsMasterAgent"));
+                return ci.FindFirstValue("IsSalesMaster");
             }
             return null;
         }

@@ -26,6 +26,7 @@ namespace SalesAdminPortal.Models
             // Add custom user claims here
             userIdentity.AddClaim(new Claim("Name", Name));
             userIdentity.AddClaim(new Claim("AgentCode", AgentCode));
+            userIdentity.AddClaim(new Claim("IsSalesMaster", IsMasterAgent ? "SM" : "A"));
             return userIdentity;
         }
     }
