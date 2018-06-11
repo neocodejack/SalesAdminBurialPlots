@@ -86,6 +86,17 @@ namespace SalesAdminPortal.Models
 
     }
 
+    public class UserListViewModel
+    {
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string AgentCode { get; set; }
+    }
+
+    public class JqGrid
+    {
+        public List<UserListViewModel> rows { get; set; }
+    }
     public class ResetPasswordViewModel
     {
         [Required]

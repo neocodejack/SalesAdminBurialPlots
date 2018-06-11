@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -155,6 +157,40 @@ namespace SalesAdminPortal.Controllers
             return View();
         }
 
+        [HttpGet]
+        public ActionResult ManageUser()
+        {
+            return View();
+        }
+        [HttpGet]
+        public ActionResult GetUsersByAgent()
+        {
+            using (ApplicationDbContext context = new ApplicationDbContext())
+            {
+                var currentAgentCode = User.Identity.GetAgentCode();
+                var userList = context.Users.Select(x => new UserListViewModel { Name = x.Name, Email = x.Email, AgentCode = x.AgentCode }).Where(r => r.AgentCode.StartsWith(currentAgentCode)).ToList();
+                var response = new JqGrid { rows = userList };
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpDelete]
+        public ActionResult DeleteUser(string agentCode)
+        {
+            using (ApplicationDbContext context = new ApplicationDbContext())
+            {
+                if (User.Identity.GetAccountType().Equals("SM"))
+                {
+                    var entity = context.Users.Select(x => x).Where(r => r.AgentCode.Equals(agentCode)).FirstOrDefault();
+                    context.Users.Remove(entity);
+                    return Json(context.SaveChanges(), JsonRequestBehavior.AllowGet);
+                }
+                else
+                {
+                    return Json(0, JsonRequestBehavior.AllowGet);
+                }
+            }
+        }
         //
         // POST: /Account/Register
         [HttpPost]
@@ -385,6 +421,7 @@ namespace SalesAdminPortal.Controllers
                     return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
             }
         }
+
 
         //
         // POST: /Account/ExternalLoginConfirmation
