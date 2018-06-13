@@ -96,7 +96,7 @@ namespace SalesAdminPortal.Controllers
                 case SignInStatus.Success:
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
-                    return View("Lockout");
+                    return Content(string.Format("Your account {0} is locked, please contact administrator",model.Email));
                 case SignInStatus.RequiresVerification:
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
@@ -154,7 +154,16 @@ namespace SalesAdminPortal.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return View();
+            if (User.Identity.IsSuperAdmin().Equals("M"))
+            {
+                var model = new RegisterViewModel { Name = "", ConfirmPassword = "", Email = "", IsMasterAgent = true, Password = "" };
+                return View(model);
+            }
+            else
+            {
+                var model = new RegisterViewModel { Name = "", ConfirmPassword = "", Email = "", IsMasterAgent = false, Password = "", AgentCodePrefix="Default" };
+                return View(model);
+            }
         }
 
         [HttpGet]
@@ -168,28 +177,32 @@ namespace SalesAdminPortal.Controllers
             using (ApplicationDbContext context = new ApplicationDbContext())
             {
                 var currentAgentCode = User.Identity.GetAgentCode();
-                var userList = context.Users.Select(x => new UserListViewModel { Name = x.Name, Email = x.Email, AgentCode = x.AgentCode }).Where(r => r.AgentCode.StartsWith(currentAgentCode)).ToList();
-                var response = new JqGrid { rows = userList };
+                var userList = context.Users.Where(r => r.AgentCode.StartsWith(currentAgentCode) && r.AgentCode.Contains("-")).Select(x => new UserListViewModel { Name = x.Name, Email = x.Email, AgentCode = x.AgentCode, IsEnabled = x.IsEnabled.Value, Id = x.Id }).ToList();
+                var response = new JqGrid { rows = userList, TotalRows = userList.Count };
                 return Json(response, JsonRequestBehavior.AllowGet);
             }
         }
 
-        [HttpDelete]
-        public ActionResult DeleteUser(string agentCode)
+        [HttpPost]
+        public ActionResult BlockUnBlockUser(string userId)
         {
-            using (ApplicationDbContext context = new ApplicationDbContext())
+            
+            if (User.Identity.GetAccountType().Equals("SM"))
             {
-                if (User.Identity.GetAccountType().Equals("SM"))
-                {
-                    var entity = context.Users.Select(x => x).Where(r => r.AgentCode.Equals(agentCode)).FirstOrDefault();
-                    context.Users.Remove(entity);
-                    return Json(context.SaveChanges(), JsonRequestBehavior.AllowGet);
-                }
+                var entity = UserManager.FindById(userId);
+
+                if (entity.IsEnabled.Value)
+                    entity.IsEnabled = false;
                 else
-                {
-                    return Json(0, JsonRequestBehavior.AllowGet);
-                }
+                    entity.IsEnabled = true;
+
+                return Json(UserManager.Update(entity), JsonRequestBehavior.AllowGet);
             }
+            else
+            {
+                return Json(0, JsonRequestBehavior.AllowGet);
+            }
+            
         }
         //
         // POST: /Account/Register
@@ -200,25 +213,40 @@ namespace SalesAdminPortal.Controllers
         {
             if (ModelState.IsValid)
             {
+
                 //Generating Agent Code
                 //Getting master agent code
                 var masterAgentCode = User.Identity.GetAgentCode();
+                var totalUsers = 0;
+
                 if (string.IsNullOrEmpty(masterAgentCode))
                 {
-                    //Checking if system admin is trying to add master users
-                    
-                }
+                    if (User.Identity.IsSuperAdmin().Equals("M"))
+                    {
+                        //Creating prefix
+                        if (string.IsNullOrEmpty(model.AgentCodePrefix))
+                        {
+                            // do nothing now
+                        }
+                        int i = 1;
+                        masterAgentCode = model.AgentCodePrefix + i.ToString().PadLeft(4, '0');
+                        model.IsMasterAgent = true;
+                    }
 
-                var totalUsers = 0;
-                using(ApplicationDbContext context = new ApplicationDbContext())
+                }
+                else
                 {
-                    totalUsers = context.Users.Count(r => r.AgentCode.StartsWith(masterAgentCode));
+
+                    using (ApplicationDbContext context = new ApplicationDbContext())
+                    {
+                        totalUsers = context.Users.Count(r => r.AgentCode.StartsWith(masterAgentCode));
+                    }
+
+                    //Updated Agent Code
+                    masterAgentCode = masterAgentCode + "-" + totalUsers.ToString();
                 }
 
-                //Updated Agent Code
-                masterAgentCode = masterAgentCode + "-" + totalUsers.ToString();
-
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Name = model.Name, AgentCode = masterAgentCode };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Name = model.Name, AgentCode = masterAgentCode, IsEnabled=true, IsSuperAdmin=false, IsMasterAgent = model.IsMasterAgent };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

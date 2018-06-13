@@ -84,18 +84,29 @@ namespace SalesAdminPortal.Models
         [Display(Name = "Name")]
         public string Name { get; set; }
 
+        [Required]
+        [Display(Name = "Mster Agent")]
+        public bool IsMasterAgent { get; set; }
+
+        //[Required]
+        [Display(Name = "Agent Code Prefix")]
+        public string AgentCodePrefix { get; set; }
+
     }
 
     public class UserListViewModel
     {
+        public string Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string AgentCode { get; set; }
+        public bool IsEnabled { get; set; }
     }
 
     public class JqGrid
     {
         public List<UserListViewModel> rows { get; set; }
+        public int TotalRows { get; set; }
     }
     public class ResetPasswordViewModel
     {
