@@ -51,5 +51,19 @@ namespace SalesAdminPortal.Helpers
             }
             return null;
         }
+
+        public static string IsSuperAdmin(this IIdentity identity)
+        {
+            if (identity == null)
+            {
+                throw new ArgumentNullException("identity");
+            }
+
+            if (identity is ClaimsIdentity ci)
+            {
+                return ci.FindFirstValue("IsSuperAdmin");
+            }
+            return null;
+        }
     }
 }

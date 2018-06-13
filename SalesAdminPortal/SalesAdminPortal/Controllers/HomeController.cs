@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNet.Identity.Owin;
+using SalesAdminPortal.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,11 @@ namespace SalesAdminPortal.Controllers
     {
         public ActionResult Index()
         {
+            if (User.Identity.IsSuperAdmin().Equals("M"))
+            {
+                return RedirectToAction("Register", "Account");
+            }
+
             return View();
         }
 

@@ -228,6 +228,7 @@
     <Content Include="Content\Layout\style.css" />
     <Content Include="Content\Login\main.css" />
     <Content Include="Content\Login\util.css" />
+    <Content Include="Content\ui.jqgrid-bootstrap.css" />
     <Content Include="Content\vendor\animate\animate.css" />
     <Content Include="Content\vendor\animsition\css\animsition.css" />
     <Content Include="Content\vendor\animsition\css\animsition.min.css" />
@@ -356,9 +357,11 @@
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-1.10.2-vsdoc.js" />
+    <Content Include="Scripts\grid.locale-en.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.jqGrid.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -422,6 +425,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Coupon\Create.cshtml" />
     <Content Include="Views\Account\Success.cshtml" />
+    <Content Include="Views\Account\ManageUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

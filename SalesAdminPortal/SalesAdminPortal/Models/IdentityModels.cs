@@ -19,6 +19,12 @@ namespace SalesAdminPortal.Models
         [Required]
         public bool IsMasterAgent { get; set; }
 
+        [Required]
+        public bool? IsEnabled { get; set; }
+
+        [Required]
+        public bool IsSuperAdmin { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
@@ -27,6 +33,7 @@ namespace SalesAdminPortal.Models
             userIdentity.AddClaim(new Claim("Name", Name));
             userIdentity.AddClaim(new Claim("AgentCode", AgentCode));
             userIdentity.AddClaim(new Claim("IsSalesMaster", IsMasterAgent ? "SM" : "A"));
+            userIdentity.AddClaim(new Claim("IsSuperAdmin", IsSuperAdmin ? "M" : ""));
             return userIdentity;
         }
     }
