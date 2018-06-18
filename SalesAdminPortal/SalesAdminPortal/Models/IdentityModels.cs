@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -25,6 +27,8 @@ namespace SalesAdminPortal.Models
         [Required]
         public bool IsSuperAdmin { get; set; }
 
+        //public ICollection<SalesTransaction> SalesTransactions { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
@@ -45,9 +49,27 @@ namespace SalesAdminPortal.Models
         {
         }
 
+        public virtual DbSet<SalesTransaction> SalesTransactions { get; set; }
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
         }
+    }
+
+    public class SalesTransaction
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+
+        public string OrderId { get; set; }
+
+        public string PorpSellingPrice { get; set; }
+
+        public string Commission { get; set; }
+
+        public string AgentCode { get; set; }
+        
     }
 }
