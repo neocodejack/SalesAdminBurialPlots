@@ -1,0 +1,113 @@
+﻿@{
+    ViewBag.Title = "Sales Transactions";
+}
+
+<div class="table-agile-info">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Sales Dashboard
+        </div>
+        <div class="row w3-res-tb">
+            <div class="col-sm-7 m-b-xs">
+            </div>
+            <div class="col-sm-2">
+                <select class="input-sm form-control w-sm inline v-middle" id="drpSelection">
+                    <option value="ac">Agent Code</option>
+                    <option value="oi">Order Id</option>
+                </select>
+            </div>
+            <div class="col-sm-3">
+                <div class="input-group">
+                    <input type="text" class="input-sm form-control" placeholder="Search" id="txtSearch">
+                    <span class="input-group-btn">
+                        <button class="btn btn-sm btn-default" type="button" id="btnGo">Go!</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table id="userTable" class="table table-striped b-t b-light">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Order Id</th>
+                        <th>Agent Code</th>
+                        <th>Selling Price</th>
+                        <th>Order Date</th>
+                        <th>Commission</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        //Load Initial Data
+        LoadData("api/sales", false);
+
+        //Attaching Events
+        $("#btnGo").click(function (evnt) {
+            if ($("#txtSearch").val() != "") {
+                if ($("#drpSelection").val() == "oi") {
+                    searchForOrderId($("#txtSearch").val());
+                }
+                else if ($("#drpSelection").val() == "ac") {
+                    searchForAgentCode($("#txtSearch").val());
+                }
+            } else {
+                LoadData("api/sales", true);
+            }
+        });
+    });
+
+    var LoadData = function (url, isResetRequired) {
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (response) {
+                PopulateGrid(response, isResetRequired);
+            }
+        });
+    }
+
+    var PopulateGrid = function (data, isResetRequired) {
+        var tr_str = "";
+        for (var j = 0; j < data.length; j++) {
+
+            var OrderId = data[j].OrderId;
+            var AgentCode = data[j].AgentCode;
+            var PorpSellingPrice = data[j].PorpSellingPrice;
+            var SaleDate = data[j].SaleDate;
+            var Commission = data[j].Commission;
+
+            tr_str += "<tr>" +
+                "<td>" + (j + 1) + "</td>" +
+                "<td>" + OrderId + "</td>" +
+                "<td>" + AgentCode + "</td>" +
+                "<td>" + PorpSellingPrice + "</td>" +
+                "<td>" + SaleDate + "</td>" +
+                "<td>" + Commission + "</td>" +
+                "</tr>";
+            
+        }
+
+        if (isResetRequired)
+            $("#tableBody").html(tr_str);
+        else
+            $("#tableBody").append(tr_str);
+    }
+
+    var searchForOrderId = function (orderId) {
+        var url = "api/sales/order/" + orderId;
+        LoadData(url, true);
+    }
+
+    var searchForAgentCode = function (agentCode) {
+        var url = "api/sales/agentcode/" + agentCode;
+        LoadData(url, true);
+    }
+
+</script>

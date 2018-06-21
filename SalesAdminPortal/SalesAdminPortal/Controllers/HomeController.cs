@@ -18,7 +18,10 @@ namespace SalesAdminPortal.Controllers
             {
                 return RedirectToAction("Register", "Account");
             }
-
+            else
+            {
+                return RedirectToAction("Index", "SalesView");
+            }
             return View();
         }
 

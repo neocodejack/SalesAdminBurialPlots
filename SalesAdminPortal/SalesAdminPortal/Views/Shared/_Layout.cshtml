@@ -55,21 +55,21 @@
                     <ul class="sidebar-menu" id="nav-accordion">
                         @if (!User.Identity.IsSuperAdmin().Equals("M"))
                         {
-                            <li>
+                            @*<li>
                                 <a class="active" href="@Url.Action("Index", "Home")">
                                     <i class="fa fa-dashboard"></i>
                                     <span>Dashboard</span>
                                 </a>
-                            </li>
+                            </li>*@
 
                             <li class="sub-menu">
-                                <a href="javascript:;">
+                                <a class="active" href="javascript:;">
                                     <i class="fa fa-book"></i>
                                     <span>Sales Insights</span>
                                 </a>
                                 <ul class="sub">
-                                    <li><a href="#">Commision Earned</a></li>
-                                    <li><a href="#">Sale Dashboard</a></li>
+                                    <li><a href="@Url.Action("Commission","SalesView")">Commision Earned</a></li>
+                                    <li><a href="@Url.Action("Index","SalesView")">Sale Dashboard</a></li>
                                 </ul>
                             </li>
                         }
