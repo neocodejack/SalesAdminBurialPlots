@@ -72,6 +72,16 @@ namespace SalesAdminPortal
                         "~/Scripts/Layout/jquery.nicescroll.js",
                         "~/Scripts/Layout/jquery.scrollTo.js"
                     ));
+
+            
+            //Jquery UI Bundle
+            bundles.Add(new ScriptBundle("~/Script/jqueryui").Include(
+                        "~/Scripts/jquery-ui-1.12.1.js"
+                    ));
+
+            bundles.Add(new StyleBundle("~/Content/jqueryui").Include(
+                        "~/Content/themes/base/jquery-ui.css"
+                    ));
         }
     }
 }

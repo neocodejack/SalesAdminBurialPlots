@@ -95,5 +95,6 @@ namespace SalesAdminPortal.Models
 
         [Required]
         public string AgentCode { get; set; }
+
     }
 }

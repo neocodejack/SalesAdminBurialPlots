@@ -21,7 +21,8 @@ namespace SalesAdminPortal.Controllers
                 try
                 {
                     var commission = (Convert.ToDouble(sale.SellingPrice) * 20) / 100;
-                    var objSaleTransaction = new SalesTransaction { AgentCode = sale.AgentCode, OrderId = sale.OrderId, PorpSellingPrice = sale.SellingPrice, Commission = commission.ToString() };
+                    
+                    var objSaleTransaction = new SalesTransaction { AgentCode = sale.AgentCode, OrderId = sale.OrderId, PorpSellingPrice = sale.SellingPrice, Commission = commission.ToString(), SaleDate = DateTime.Now };
                     using (var context = new ApplicationDbContext())
                     {
                         if (context.Users.Where(r => r.AgentCode.Equals(sale.AgentCode)).FirstOrDefault() != null)
@@ -67,6 +68,64 @@ namespace SalesAdminPortal.Controllers
                 }
                 
                 return Request.CreateResponse(HttpStatusCode.OK, salesTransaction);
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("api/sales/order/{id}")]
+        public HttpResponseMessage GetByOrderId(string id)
+        {
+            using(var context = new ApplicationDbContext())
+            {
+                List<SalesTransaction> sales = null;
+                var currentAgentCode = User.Identity.GetAgentCode();
+                if (User.Identity.GetAccountType().Equals("A"))
+                {
+                    sales = context.SalesTransactions.Where(r => r.AgentCode.Equals(currentAgentCode) && r.OrderId.Equals(id)).ToList();
+                }
+                else
+                {
+                    sales = context.SalesTransactions.Where(r => r.AgentCode.StartsWith(currentAgentCode) && r.OrderId.Equals(id)).ToList();
+                }
+
+                return Request.CreateResponse(HttpStatusCode.OK, sales);
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("api/sales/agentcode/{code}")]
+        public HttpResponseMessage GetByAgentCode(string code)
+        {
+            using(var context = new ApplicationDbContext())
+            {
+                List<SalesTransaction> sales = null;
+                if (User.Identity.GetAccountType().Equals("SM"))
+                {
+                    sales = context.SalesTransactions.Where(r => r.AgentCode.Equals(code)).ToList();
+                }
+
+                return Request.CreateResponse(HttpStatusCode.OK, sales);
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("api/sales/{startDate}/{endDate}")]
+        public HttpResponseMessage GetCommissionByDate(string startDate, string endDate)
+        {
+            var ddtStartDate = Convert.ToDateTime(startDate);
+            var ddtEndDate = Convert.ToDateTime(endDate);
+
+            using(var context = new ApplicationDbContext())
+            {
+                List<SalesTransaction> sales = null;
+                sales = context.SalesTransactions.Where(r => r.AgentCode.Equals(User.Identity.GetAgentCode()) 
+                                                            && (r.SaleDate >= ddtStartDate) && (r.SaleDate <= ddtEndDate))
+                                                .ToList();
+
+                return Request.CreateResponse(HttpStatusCode.OK, sales);
             }
         }
     }
