@@ -8,9 +8,9 @@
             Sales Dashboard
         </div>
         <div class="row w3-res-tb">
-            <div class="col-sm-5 m-b-xs">
+            <div class="col-sm-7 m-b-xs">
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-2">
                 <select class="input-sm form-control w-sm inline v-middle" id="drpSelection">
                     <option value="ac">Agent Code</option>
                     <option value="oi">Order Id</option>
@@ -34,6 +34,7 @@
                         <th>Agent Code</th>
                         <th>Selling Price</th>
                         <th>Order Date</th>
+                        <th>Commission</th>
                     </tr>
                 </thead>
                 <tbody id="tableBody"></tbody>
@@ -50,10 +51,10 @@
         //Attaching Events
         $("#btnGo").click(function (evnt) {
             if ($("#txtSearch").val() != "") {
-                if ($("#drpSelection").val() == "") {
+                if ($("#drpSelection").val() == "oi") {
                     searchForOrderId($("#txtSearch").val());
                 }
-                else {
+                else if ($("#drpSelection").val() == "ac") {
                     searchForAgentCode($("#txtSearch").val());
                 }
             } else {
@@ -72,26 +73,31 @@
         });
     }
 
-    var PopulateGrid = function (data) {
+    var PopulateGrid = function (data, isResetRequired) {
+        var tr_str = "";
         for (var j = 0; j < data.length; j++) {
 
             var OrderId = data[j].OrderId;
             var AgentCode = data[j].AgentCode;
             var PorpSellingPrice = data[j].PorpSellingPrice;
             var SaleDate = data[j].SaleDate;
+            var Commission = data[j].Commission;
 
-            var tr_str = "<tr>" +
+            tr_str += "<tr>" +
                 "<td>" + (j + 1) + "</td>" +
                 "<td>" + OrderId + "</td>" +
                 "<td>" + AgentCode + "</td>" +
                 "<td>" + PorpSellingPrice + "</td>" +
-                "<td>" + PorpSellingPrice + "</td>" +
+                "<td>" + SaleDate + "</td>" +
+                "<td>" + Commission + "</td>" +
                 "</tr>";
-            if (isResetRequired)
-                $("#userTable").append(tr_str);
-            else
-                $("#userTable").append(tr_str);
+            
         }
+
+        if (isResetRequired)
+            $("#tableBody").html(tr_str);
+        else
+            $("#tableBody").append(tr_str);
     }
 
     var searchForOrderId = function (orderId) {
@@ -101,7 +107,7 @@
 
     var searchForAgentCode = function (agentCode) {
         var url = "api/sales/agentcode/" + agentCode;
-        LoadDat(url, true);
+        LoadData(url, true);
     }
 
 </script>
