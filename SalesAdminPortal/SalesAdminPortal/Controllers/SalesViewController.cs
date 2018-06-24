@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 namespace SalesAdminPortal.Controllers
 {
+    [Authorize]
     public class SalesViewController : Controller
     {
         // GET: SalesView
