@@ -51,6 +51,7 @@ namespace SalesAdminPortal.Models
         }
 
         public virtual DbSet<SalesTransaction> SalesTransactions { get; set; }
+        public virtual DbSet<DashboardFeed> DashboardFeeds { get; set; }
 
         public static ApplicationDbContext Create()
         {
@@ -74,5 +75,20 @@ namespace SalesAdminPortal.Models
 
         public DateTime SaleDate { get; set; }
         
+    }
+
+    public class DashboardFeed
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int NewsFeedId { get; set; }
+
+        [Required]
+        public string Name { get; set; }
+
+        [Required]
+        public string Description { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }
