@@ -10,15 +10,20 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Production|Any CPU = Production|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{CA89857D-B86B-4CE3-8E0B-E07DAF71B368}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CA89857D-B86B-4CE3-8E0B-E07DAF71B368}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA89857D-B86B-4CE3-8E0B-E07DAF71B368}.Production|Any CPU.ActiveCfg = Production|Any CPU
+		{CA89857D-B86B-4CE3-8E0B-E07DAF71B368}.Production|Any CPU.Build.0 = Production|Any CPU
 		{CA89857D-B86B-4CE3-8E0B-E07DAF71B368}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA89857D-B86B-4CE3-8E0B-E07DAF71B368}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1A5C8E04-1CC8-456F-8E78-0BF205A09E0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1A5C8E04-1CC8-456F-8E78-0BF205A09E0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A5C8E04-1CC8-456F-8E78-0BF205A09E0B}.Production|Any CPU.ActiveCfg = Production|Any CPU
+		{1A5C8E04-1CC8-456F-8E78-0BF205A09E0B}.Production|Any CPU.Build.0 = Production|Any CPU
 		{1A5C8E04-1CC8-456F-8E78-0BF205A09E0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A5C8E04-1CC8-456F-8E78-0BF205A09E0B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection

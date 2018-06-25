@@ -61,6 +61,7 @@ namespace SalesAdminPortal
                         "~/Content/Layout/morris.css",
                         "~/Content/Layout/monthly.css"
                     ));
+
             bundles.Add(new ScriptBundle("~/Scripts/layout").Include(
                         "~/Scripts/Layout/jquery2.0.3.min.js",
                         "~/Scripts/Layout/raphael-min.js",
