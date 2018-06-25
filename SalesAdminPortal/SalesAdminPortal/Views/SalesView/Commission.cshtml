@@ -4,13 +4,48 @@
 
 @Styles.Render("~/Content/jqueryui")
 @Scripts.Render("~/Scripts/jqueryui")
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <script type="text/javascript">
     //Code to call api and Display Sales Earning Monthwise
+    $(document).ready(function () {
+        var dateFormat = "mm/dd/yy",
+            from = $("#from")
+                .datepicker({
+                    defaultDate: "+1w",
+                    changeMonth: true,
+                    changeYear: true,
+                    numberOfMonths: 1
+                })
+                .on("change", function () {
+                    to.datepicker("option", "minDate", getDate(this));
+                }),
+            to = $("#to").datepicker({
+                defaultDate: "+1w",
+                changeMonth: true,
+                changeYear: true,
+                numberOfMonths: 1
+            })
+                .on("change", function () {
+                    from.datepicker("option", "maxDate", getDate(this));
+                });
+
+        function getDate(element) {
+            var date;
+            try {
+                date = $.datepicker.parseDate(dateFormat, element.value);
+            } catch (error) {
+                date = null;
+            }
+
+            return date;
+        }
+       
+    });
 </script>
 
 <!--
-    Code to populate the text boxes and grid to display as per search record.    
+    Code to populate the text boxes and grid to display as per search record.
 -->
 <div class="table-agile-info">
     <div class="panel panel-default">
@@ -18,14 +53,18 @@
             Commission Book
         </div>
         <div class="row w3-res-tb">
-            <div class="col-sm-5 m-b-xs">
-                
+            <div class="col-sm-2 m-b-xs">
+                Select date Range:
             </div>
-            <div class="col-sm-5">
-               
+            <div class="col-sm-6  m-b-xs">
+                <label for="from">From</label>
+                <input type="text" id="from" name="from">
+                <label for="to">to</label>
+                <input type="text" id="to" name="to">
             </div>
-            <div class="col-sm-2">
-                
+            <div class="col-sm-4 m-b-xs">
+                <button type="button" id="btnReport">Report</button>
+                <button type="button" id="btnPdf">Download PDF</button>
             </div>
         </div>
     </div>
