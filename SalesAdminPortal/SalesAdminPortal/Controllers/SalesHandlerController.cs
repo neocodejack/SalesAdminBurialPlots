@@ -2,9 +2,11 @@
 using SalesAdminPortal.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
 
@@ -126,6 +128,54 @@ namespace SalesAdminPortal.Controllers
                                                 .ToList();
 
                 return Request.CreateResponse(HttpStatusCode.OK, sales);
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("api/exporttopdf/{startDate}/{endDate}")]
+        public HttpResponseMessage ExportToPdf(string startDate, string endDate)
+        {
+            Byte[] res = null;
+
+            var ddtStartDate = Convert.ToDateTime(startDate);
+            var ddtEndDate = Convert.ToDateTime(endDate);
+
+            string html="<html><body><table><thead><th>Id</th><th>Order Id</th><th>Agent Code</th><th>Selling Price</th><th>Commission</th></thead><tbody>";
+
+            using (var context = new ApplicationDbContext())
+            {
+                List<SalesTransaction> sales = null;
+                sales = context.SalesTransactions.Where(r => r.AgentCode.Equals(User.Identity.GetAgentCode())
+                                                            && (r.SaleDate >= ddtStartDate) && (r.SaleDate <= ddtEndDate))
+                                                .ToList();
+
+                foreach(var item in sales)
+                {
+                    html += "<tr><td>" + item.OrderId + "</td><td>" + item.AgentCode + "</td><td>" + item.PorpSellingPrice + "</td><td>" + item.Commission + "</td></tr>"; 
+                }
+
+                html += "</tbody></table></body</html>";
+            }
+            using (MemoryStream ms = new MemoryStream())
+            {
+                var pdf = TheArtOfDev.HtmlRenderer.PdfSharp.PdfGenerator.GeneratePdf(html, PdfSharp.PageSize.A4);
+                
+                pdf.Save(ms);
+                res = ms.ToArray();
+                var response = new HttpResponseMessage
+                {
+                    Content = new StreamContent(new MemoryStream(res))
+                };
+                response.Content.Headers.ContentLength = res.Length;
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/pdf");
+                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = DateTime.Now.ToString() + User.Identity.GetAgentCode() + ".pdf",
+                    Size = pdf.FileSize
+                };
+
+                return response;
             }
         }
     }
