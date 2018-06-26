@@ -112,28 +112,28 @@ namespace SalesAdminPortal.Controllers
             }
         }
 
-        [Authorize]
-        [HttpGet]
-        [Route("api/sales/{startDate}/{endDate}")]
-        public HttpResponseMessage GetCommissionByDate(string startDate, string endDate)
-        {
-            var ddtStartDate = Convert.ToDateTime(startDate);
-            var ddtEndDate = Convert.ToDateTime(endDate);
+        //[Authorize]
+        //[HttpPost]
+        //[Route("api/sales/commissionbydate/")]
+        //public HttpResponseMessage CommissionByDate(string startDate, string endDate)
+        //{
+        //    var ddtStartDate = Convert.ToDateTime(startDate);
+        //    var ddtEndDate = Convert.ToDateTime(endDate);
 
-            using(var context = new ApplicationDbContext())
-            {
-                List<SalesTransaction> sales = null;
-                sales = context.SalesTransactions.Where(r => r.AgentCode.Equals(User.Identity.GetAgentCode()) 
-                                                            && (r.SaleDate >= ddtStartDate) && (r.SaleDate <= ddtEndDate))
-                                                .ToList();
+        //    using(var context = new ApplicationDbContext())
+        //    {
+        //        List<SalesTransaction> sales = null;
+        //        sales = context.SalesTransactions.Where(r => r.AgentCode.Equals(User.Identity.GetAgentCode()) 
+        //                                                    && (r.SaleDate.Date >= ddtStartDate.Date) && (r.SaleDate.Date <= ddtEndDate.Date))
+        //                                        .ToList();
 
-                return Request.CreateResponse(HttpStatusCode.OK, sales);
-            }
-        }
+        //        return Request.CreateResponse(HttpStatusCode.OK, sales);
+        //    }
+        //}
 
-        [Authorize]
-        [HttpGet]
-        [Route("api/exporttopdf/{startDate}/{endDate}")]
+        //[Authorize]
+        [HttpPost]
+        [Route("api/sales/exporttopdf/")]
         public HttpResponseMessage ExportToPdf(string startDate, string endDate)
         {
             Byte[] res = null;
