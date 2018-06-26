@@ -21,6 +21,11 @@ namespace SalesAdminPortal.Models
         public IList<AuthenticationDescription> OtherLogins { get; set; }
     }
 
+    public class DateRange
+    {
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
+    }
     public class FactorViewModel
     {
         public string Purpose { get; set; }
