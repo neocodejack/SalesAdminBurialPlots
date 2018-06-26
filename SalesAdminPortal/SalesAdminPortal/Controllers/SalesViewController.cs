@@ -24,33 +24,5 @@ namespace SalesAdminPortal.Controllers
         {
             return View();
         }
-
-        public JsonResult CommissionByDate(string startDate, string endDate)
-        {
-            //IFormatProvider culture = new CultureInfo("en-US", true);
-            //DateTime ddtStartDate = DateTime.ParseExact(startDate, "yyyy-MM-dd", culture);
-            //DateTime ddtEndDate = DateTime.ParseExact(endDate, "yyyy-MM-dd", culture);
-            var ddtStartDate = Convert.ToDateTime(startDate);
-            var ddtEndDate = Convert.ToDateTime(endDate);
-            var agentCode = User.Identity.GetAgentCode();
-            List<SalesTransaction> response = new List<SalesTransaction>();
-
-            using (var context = new ApplicationDbContext())
-            {
-                List<SalesTransaction> sales = null;
-                sales = context.SalesTransactions.Where(r => r.AgentCode.StartsWith(agentCode)
-                                                            && (r.SaleDate >= ddtStartDate.Date) && (r.SaleDate <= ddtEndDate.Date))
-                                                .ToList();
-                //foreach(var item in sales)
-                //{
-                //    if((item.SaleDate.Date>=ddtStartDate.Date) && (item.SaleDate.Date <= ddtEndDate.Date))
-                //    {
-                //        response.Add(item);
-                //    }
-                //}
-
-                return Json(sales, JsonRequestBehavior.AllowGet);
-            }
-        }
     }
 }

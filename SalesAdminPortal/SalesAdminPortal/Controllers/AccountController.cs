@@ -154,6 +154,11 @@ namespace SalesAdminPortal.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
+            if(User.Identity.IsAuthenticated == false)
+            {
+                var model = new RegisterViewModel { Name = "", ConfirmPassword = "", Email = "", IsMasterAgent = true, Password = "", AgentCodePrefix="" };
+                return View("_SuperAdminRegister", model);
+            }
             if (User.Identity.IsSuperAdmin().Equals("M"))
             {
                 var model = new RegisterViewModel { Name = "", ConfirmPassword = "", Email = "", IsMasterAgent = true, Password = "" };
@@ -207,13 +212,18 @@ namespace SalesAdminPortal.Controllers
         //
         // POST: /Account/Register
         [HttpPost]
-        [Authorize]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-
+                if (User.Identity.IsAuthenticated == false)
+                {
+                    var superUser = new ApplicationUser { UserName = model.Email, Email = model.Email, Name = model.Name, AgentCode = "Default", IsEnabled = true, IsSuperAdmin = true, IsMasterAgent = false };
+                    var response = await UserManager.CreateAsync(superUser, model.Password);
+                    return Content(response.Succeeded.ToString());
+                }
                 //Generating Agent Code
                 //Getting master agent code
                 var masterAgentCode = User.Identity.GetAgentCode();

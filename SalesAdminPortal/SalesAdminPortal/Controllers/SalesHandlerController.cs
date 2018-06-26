@@ -113,27 +113,28 @@ namespace SalesAdminPortal.Controllers
         }
 
         //[Authorize]
-        //[HttpPost]
-        //[Route("api/sales/commissionbydate/")]
-        //public HttpResponseMessage CommissionByDate(string startDate, string endDate)
-        //{
-        //    var ddtStartDate = Convert.ToDateTime(startDate);
-        //    var ddtEndDate = Convert.ToDateTime(endDate);
+        [HttpPost]
+        [Route("api/sales/commissionbydate/")]
+        public HttpResponseMessage CommissionByDate(string startDate, string endDate)
+        {
+            var ddtStartDate = Convert.ToDateTime(startDate);
+            var ddtEndDate = Convert.ToDateTime(endDate);
+            var agentCode = User.Identity.GetAgentCode();
+            List<SalesTransaction> response = new List<SalesTransaction>();
 
-        //    using(var context = new ApplicationDbContext())
-        //    {
-        //        List<SalesTransaction> sales = null;
-        //        sales = context.SalesTransactions.Where(r => r.AgentCode.Equals(User.Identity.GetAgentCode()) 
-        //                                                    && (r.SaleDate.Date >= ddtStartDate.Date) && (r.SaleDate.Date <= ddtEndDate.Date))
-        //                                        .ToList();
-
-        //        return Request.CreateResponse(HttpStatusCode.OK, sales);
-        //    }
-        //}
+            using (var context = new ApplicationDbContext())
+            {
+                List<SalesTransaction> sales = null;
+                sales = context.SalesTransactions.Where(r => r.AgentCode.StartsWith(agentCode)
+                                                            && (r.SaleDate >= ddtStartDate.Date) && (r.SaleDate <= ddtEndDate.Date))
+                                                .ToList();
+                return Request.CreateResponse(HttpStatusCode.OK, sales);
+            }
+        }
 
         //[Authorize]
         [HttpPost]
-        [Route("api/sales/exporttopdf/")]
+        [Route("api/sales/downloadpdf/")]
         public HttpResponseMessage ExportToPdf(string startDate, string endDate)
         {
             Byte[] res = null;
@@ -147,7 +148,7 @@ namespace SalesAdminPortal.Controllers
             {
                 List<SalesTransaction> sales = null;
                 sales = context.SalesTransactions.Where(r => r.AgentCode.Equals(User.Identity.GetAgentCode())
-                                                            && (r.SaleDate >= ddtStartDate) && (r.SaleDate <= ddtEndDate))
+                                                            && (r.SaleDate >= ddtStartDate.Date) && (r.SaleDate <= ddtEndDate.Date))
                                                 .ToList();
 
                 foreach(var item in sales)

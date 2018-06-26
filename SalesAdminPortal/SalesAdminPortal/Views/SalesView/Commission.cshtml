@@ -45,8 +45,8 @@
             var total = 0;
             $.ajax({
                 type: "POST",
-                url: "@Url.Action("CommissionByDate", "SalesView")",
-                data: { "startDate": $("#from").val(), "endDate": $("#to").val()},
+                url: encodeURI("/api/sales/commissionbydate?startDate=" + $("#from").val() + "&endDate=+" + $("#to").val()),
+                //data: { "startDate": $("#from").val(), "endDate": $("#to").val()},
                 success: function (response) {
                     var tr_str = "";
                     for (var j = 0; j < response.length; j++) {
