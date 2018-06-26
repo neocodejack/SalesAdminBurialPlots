@@ -44,7 +44,7 @@
 
         $("#btnPdf").click(function (evt) {
             var url = "@ConfigurationManager.AppSettings["serviceUrl"].ToString()";
-            url = encodeURI(url + "api/sales/downloadpdf?startDate=" + $("#from").val() + "&endDate=+" + $("#to").val());
+            url = url + "api/sales/downloadpdf?startDate=" + $("#from").val() + "&endDate=" + $("#to").val();
             $.AjaxDownloader({
                 url: url
             });
@@ -55,7 +55,7 @@
             var url = "@ConfigurationManager.AppSettings["serviceUrl"].ToString()";
             $.ajax({
                 type: "POST",
-                url: encodeURI(url+"api/sales/commissionbydate?startDate=" + $("#from").val() + "&endDate=+" + $("#to").val()),
+                url: url+"api/sales/commissionbydate?startDate=" + $("#from").val() + "&endDate=" + $("#to").val(),
                 success: function (response) {
                     var tr_str = "";
                     for (var j = 0; j < response.length; j++) {
