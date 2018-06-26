@@ -44,7 +44,7 @@
 
         $("#btnPdf").click(function (evt) {
             var url = "@ConfigurationManager.AppSettings["serviceUrl"].ToString()";
-            url = url + "api/sales/downloadpdf?startDate=" + $("#from").val() + "&endDate=" + $("#to").val();
+            url = url + "api/sales/downloadpdf";
             $.AjaxDownloader({
                 url: url
             });
@@ -55,7 +55,11 @@
             var url = "@ConfigurationManager.AppSettings["serviceUrl"].ToString()";
             $.ajax({
                 type: "POST",
-                url: url+"api/sales/commissionbydate?startDate=" + $("#from").val() + "&endDate=" + $("#to").val(),
+                url: url + "api/sales/commissionbydate",
+                data: {
+                    "StartDate": $("#from").val(),
+                    "EndDate": $("#to").val()
+                },
                 success: function (response) {
                     var tr_str = "";
                     for (var j = 0; j < response.length; j++) {
@@ -76,6 +80,9 @@
                             "</tr>";
                         total += parseInt(Commission);
                     }
+
+                    $("#tableBody").html(tr_str);
+                    $("#totalEarning").html(total);
                 }
             });
         });
@@ -120,10 +127,10 @@
                 </thead>
                 <tbody id="tableBody"></tbody>
             </table>
-        </div>
-        <div class="row w3-res-tb" style="float:right">
-            <label for="total">Total Commission:</label>
-            <label id="totalEarning"></label>
+            <div class="" style="float:right">
+                <label for="total">Total Commission:</label>
+                <label id="totalEarning"></label>
+            </div>
         </div>
     </div>
 </div>
