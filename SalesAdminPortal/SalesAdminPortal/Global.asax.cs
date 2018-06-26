@@ -18,9 +18,7 @@ namespace SalesAdminPortal
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-            //GlobalConfiguration.Configuration
-            //          .EnableSwagger(c => c.SingleApiVersion("v1", "A title for your API"))
-            //          .EnableSwaggerUi();
+            
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<ApplicationDbContext, Configuration>());
             var db = new ApplicationDbContext();
             db.Database.Initialize(true);
