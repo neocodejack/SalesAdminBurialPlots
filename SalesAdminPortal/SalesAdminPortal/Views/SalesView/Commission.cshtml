@@ -5,11 +5,11 @@
 @Styles.Render("~/Content/jqueryui")
 @Scripts.Render("~/Scripts/jqueryui")
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-ajax-downloader@1.1.0/src/ajaxdownloader.min.js"></script>
 <script type="text/javascript">
     //Code to call api and Display Sales Earning Monthwise
     $(document).ready(function () {
-        var dateFormat = "mm/dd/yy",
+        var dateFormat = "yyyy/mm/dd",
             from = $("#from")
                 .datepicker({
                     defaultDate: "+1w",
@@ -40,7 +40,42 @@
 
             return date;
         }
-       
+
+        $("#btnPdf").click(function (evt) {
+            $.AjaxDownloader({
+                url: "/api/sales/downloadpdf?startDate=07%2F20%2F2018&endDate=07%2F23%2F2018"
+            });
+        });
+
+        $("#btnReport").click(function (evt) {
+            var total = 0;
+            $.ajax({
+                type: "POST",
+                url: encodeURI("/api/sales/commissionbydate?startDate=" + $("#from").val() + "&endDate=+" + $("#to").val()),
+                success: function (response) {
+                    var tr_str = "";
+                    for (var j = 0; j < response.length; j++) {
+
+                        var OrderId = response[j].OrderId;
+                        var AgentCode = response[j].AgentCode;
+                        var PorpSellingPrice = response[j].PorpSellingPrice;
+                        var SaleDate = response[j].SaleDate;
+                        var Commission = response[j].Commission;
+
+                        tr_str += "<tr>" +
+                            "<td>" + (j + 1) + "</td>" +
+                            "<td>" + OrderId + "</td>" +
+                            "<td>" + AgentCode + "</td>" +
+                            "<td>" + PorpSellingPrice + "</td>" +
+                            "<td>" + SaleDate + "</td>" +
+                            "<td>" + Commission + "</td>" +
+                            "</tr>";
+                        total += parseInt(Commission);
+                    }
+                }
+            });
+        });
+
     });
 </script>
 
@@ -66,6 +101,25 @@
                 <button type="button" id="btnReport">Report</button>
                 <button type="button" id="btnPdf">Download PDF</button>
             </div>
+        </div>
+        <div class="table-responsive">
+            <table id="userTable" class="table table-striped b-t b-light">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Order Id</th>
+                        <th>Agent Code</th>
+                        <th>Selling Price</th>
+                        <th>Order Date</th>
+                        <th>Commission</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+        <div class="row w3-res-tb" style="float:right">
+            <label for="total">Total Commission:</label>
+            <label id="totalEarning"></label>
         </div>
     </div>
 </div>

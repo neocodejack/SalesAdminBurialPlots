@@ -112,45 +112,46 @@ namespace SalesAdminPortal.Controllers
             }
         }
 
-        [Authorize]
-        [HttpGet]
-        [Route("api/sales/{startDate}/{endDate}")]
-        public HttpResponseMessage GetCommissionByDate(string startDate, string endDate)
+        //[Authorize]
+        [HttpPost]
+        [Route("api/sales/commissionbydate/")]
+        public HttpResponseMessage CommissionByDate(string startDate, string endDate)
         {
             var ddtStartDate = Convert.ToDateTime(startDate);
             var ddtEndDate = Convert.ToDateTime(endDate);
+            var agentCode = User.Identity.GetAgentCode();
+            List<SalesTransaction> response = new List<SalesTransaction>();
 
-            using(var context = new ApplicationDbContext())
+            using (var context = new ApplicationDbContext())
             {
                 List<SalesTransaction> sales = null;
-                sales = context.SalesTransactions.Where(r => r.AgentCode.Equals(User.Identity.GetAgentCode()) 
-                                                            && (r.SaleDate >= ddtStartDate) && (r.SaleDate <= ddtEndDate))
+                sales = context.SalesTransactions.Where(r => r.AgentCode.StartsWith(agentCode)
+                                                            && (r.SaleDate >= ddtStartDate.Date) && (r.SaleDate <= ddtEndDate.Date))
                                                 .ToList();
-
                 return Request.CreateResponse(HttpStatusCode.OK, sales);
             }
         }
 
-        [Authorize]
-        [HttpGet]
-        [Route("api/exporttopdf/{startDate}/{endDate}")]
+        //[Authorize]
+        [HttpPost]
+        [Route("api/sales/downloadpdf/")]
         public HttpResponseMessage ExportToPdf(string startDate, string endDate)
         {
             Byte[] res = null;
 
             var ddtStartDate = Convert.ToDateTime(startDate);
             var ddtEndDate = Convert.ToDateTime(endDate);
-
-            string html="<html><body><table><thead><th>Id</th><th>Order Id</th><th>Agent Code</th><th>Selling Price</th><th>Commission</th></thead><tbody>";
+            var agentCode = User.Identity.GetAgentCode();
+            string html="<html><body>Welcome<table><thead><th>Id</th><th>Order Id</th><th>Agent Code</th><th>Selling Price</th><th>Commission</th></thead><tbody>";
 
             using (var context = new ApplicationDbContext())
             {
                 List<SalesTransaction> sales = null;
-                sales = context.SalesTransactions.Where(r => r.AgentCode.Equals(User.Identity.GetAgentCode())
-                                                            && (r.SaleDate >= ddtStartDate) && (r.SaleDate <= ddtEndDate))
+                sales = context.SalesTransactions.Where(r => r.AgentCode.StartsWith(agentCode)
+                                                            && (r.SaleDate >= ddtStartDate.Date) && (r.SaleDate <= ddtEndDate.Date))
                                                 .ToList();
 
-                foreach(var item in sales)
+                foreach (var item in sales)
                 {
                     html += "<tr><td>" + item.OrderId + "</td><td>" + item.AgentCode + "</td><td>" + item.PorpSellingPrice + "</td><td>" + item.Commission + "</td></tr>"; 
                 }
