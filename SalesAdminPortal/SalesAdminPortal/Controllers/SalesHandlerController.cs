@@ -115,7 +115,7 @@ namespace SalesAdminPortal.Controllers
         //[Authorize]
         [HttpPost]
         [Route("api/sales/commissionbydate/")]
-        public HttpResponseMessage CommissionByDate([FromBody] DateRange dateRange)
+        public HttpResponseMessage CommissionByDate(DateRange dateRange)
         {
             var ddtStartDate = Convert.ToDateTime(dateRange.StartDate);
             var ddtEndDate = Convert.ToDateTime(dateRange.EndDate);
