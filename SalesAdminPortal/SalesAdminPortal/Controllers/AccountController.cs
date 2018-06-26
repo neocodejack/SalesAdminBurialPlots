@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Security.Claims;
@@ -8,6 +11,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using SalesAdminPortal.Helpers;
 using SalesAdminPortal.Models;
 
 namespace SalesAdminPortal.Controllers
@@ -17,6 +21,7 @@ namespace SalesAdminPortal.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private string _hostName;
 
         public AccountController()
         {
@@ -52,6 +57,16 @@ namespace SalesAdminPortal.Controllers
             }
         }
 
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            base.OnActionExecuting(filterContext);
+            Debug.Print("Host:" + Request.Url.Host); // Accessible here
+            if (Request.Url.Host == "localhost")
+            {
+                _hostName = "LOCAL_ENV";
+            }
+        }
+
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -81,7 +96,7 @@ namespace SalesAdminPortal.Controllers
                 case SignInStatus.Success:
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
-                    return View("Lockout");
+                    return Content(string.Format("Your account {0} is locked, please contact administrator",model.Email));
                 case SignInStatus.RequiresVerification:
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
@@ -139,9 +154,61 @@ namespace SalesAdminPortal.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return View();
+            if(User.Identity.IsAuthenticated == false)
+            {
+                var model = new RegisterViewModel { Name = "", ConfirmPassword = "", Email = "", IsMasterAgent = true, Password = "", AgentCodePrefix="" };
+                return View("_SuperAdminRegister", model);
+            }
+            if (User.Identity.IsSuperAdmin().Equals("M"))
+            {
+                var model = new RegisterViewModel { Name = "", ConfirmPassword = "", Email = "", IsMasterAgent = true, Password = "" };
+                return View(model);
+            }
+            else
+            {
+                var model = new RegisterViewModel { Name = "", ConfirmPassword = "", Email = "", IsMasterAgent = false, Password = "", AgentCodePrefix="Default" };
+                return View(model);
+            }
         }
 
+        [HttpGet]
+        public ActionResult ManageUser()
+        {
+            return View();
+        }
+        [HttpGet]
+        public ActionResult GetUsersByAgent()
+        {
+            using (ApplicationDbContext context = new ApplicationDbContext())
+            {
+                var currentAgentCode = User.Identity.GetAgentCode();
+                var userList = context.Users.Where(r => r.AgentCode.StartsWith(currentAgentCode) && r.AgentCode.Contains("-")).Select(x => new UserListViewModel { Name = x.Name, Email = x.Email, AgentCode = x.AgentCode, IsEnabled = x.IsEnabled.Value, Id = x.Id }).ToList();
+                var response = new JqGrid { rows = userList, TotalRows = userList.Count };
+                return Json(response, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult BlockUnBlockUser(string userId)
+        {
+            
+            if (User.Identity.GetAccountType().Equals("SM"))
+            {
+                var entity = UserManager.FindById(userId);
+
+                if (entity.IsEnabled.Value)
+                    entity.IsEnabled = false;
+                else
+                    entity.IsEnabled = true;
+
+                return Json(UserManager.Update(entity), JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(0, JsonRequestBehavior.AllowGet);
+            }
+            
+        }
         //
         // POST: /Account/Register
         [HttpPost]
@@ -151,19 +218,58 @@ namespace SalesAdminPortal.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                if (User.Identity.IsAuthenticated == false)
+                {
+                    var superUser = new ApplicationUser { UserName = model.Email, Email = model.Email, Name = model.Name, AgentCode = "Default", IsEnabled = true, IsSuperAdmin = true, IsMasterAgent = false };
+                    var response = await UserManager.CreateAsync(superUser, model.Password);
+                    return Content(response.Succeeded.ToString());
+                }
+                //Generating Agent Code
+                //Getting master agent code
+                var masterAgentCode = User.Identity.GetAgentCode();
+                var totalUsers = 0;
+
+                if (string.IsNullOrEmpty(masterAgentCode))
+                {
+                    if (User.Identity.IsSuperAdmin().Equals("M"))
+                    {
+                        //Creating prefix
+                        if (string.IsNullOrEmpty(model.AgentCodePrefix))
+                        {
+                            // do nothing now
+                        }
+                        int i = 1;
+                        masterAgentCode = model.AgentCodePrefix + i.ToString().PadLeft(4, '0');
+                        model.IsMasterAgent = true;
+                    }
+
+                }
+                else
+                {
+
+                    using (ApplicationDbContext context = new ApplicationDbContext())
+                    {
+                        totalUsers = context.Users.Count(r => r.AgentCode.StartsWith(masterAgentCode));
+                    }
+
+                    //Updated Agent Code
+                    masterAgentCode = masterAgentCode + "-" + totalUsers.ToString();
+                }
+
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email, Name = model.Name, AgentCode = masterAgentCode, IsEnabled=true, IsSuperAdmin=false, IsMasterAgent = model.IsMasterAgent };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    //Shouldn't get signed in
+                    //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
+
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-                    return RedirectToAction("Index", "Home");
+                    TempData["AgentCode"] = masterAgentCode;
+                    return RedirectToAction("Success", "Account");
                 }
                 AddErrors(result);
             }
@@ -172,6 +278,13 @@ namespace SalesAdminPortal.Controllers
             return View(model);
         }
 
+        
+        [HttpGet]
+        public ActionResult Success()
+        {
+            ViewBag.AgentCode = Convert.ToString(TempData["AgentCode"]);
+            return View();
+        }
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
@@ -346,6 +459,7 @@ namespace SalesAdminPortal.Controllers
                     return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { Email = loginInfo.Email });
             }
         }
+
 
         //
         // POST: /Account/ExternalLoginConfirmation

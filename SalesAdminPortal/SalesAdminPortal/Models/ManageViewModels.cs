@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
@@ -82,5 +83,18 @@ namespace SalesAdminPortal.Models
     {
         public string SelectedProvider { get; set; }
         public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
+    }
+
+    public class Sale
+    {
+        [Required]
+        public string OrderId { get; set; }
+
+        [Required]
+        public string SellingPrice { get; set; }
+
+        [Required]
+        public string AgentCode { get; set; }
+
     }
 }
