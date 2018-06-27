@@ -119,8 +119,8 @@ namespace SalesAdminPortal.Controllers
         {
             try
             {
-                var ddtStartDate = Convert.ToDateTime(dateRange.StartDate);
-                var ddtEndDate = Convert.ToDateTime(dateRange.EndDate);
+                var ddtStartDate = Convert.ToDateTime(dateRange.StartDate, System.Globalization.CultureInfo.GetCultureInfo("en-GB").DateTimeFormat);
+                var ddtEndDate = Convert.ToDateTime(dateRange.EndDate, System.Globalization.CultureInfo.GetCultureInfo("en-GB").DateTimeFormat);
                 var agentCode = User.Identity.GetAgentCode();
                 List<SalesTransaction> response = new List<SalesTransaction>();
 
