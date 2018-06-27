@@ -2,6 +2,7 @@
 using SalesAdminPortal.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -159,30 +160,36 @@ namespace SalesAdminPortal.Controllers
         //[Authorize]
         [HttpPost]
         [Route("api/sales/downloadpdf/")]
-        public HttpResponseMessage ExportToPdf()
+        public HttpResponseMessage ExportToPdf(DateRange dateRange)
         {
             try
             {
                 Byte[] res = null;
 
-                //var ddtStartDate = Convert.ToDateTime(startDate);
-                //var ddtEndDate = Convert.ToDateTime(endDate);
+                var ddtStartDate = Convert.ToDateTime(dateRange.StartDate, System.Globalization.CultureInfo.GetCultureInfo("en-GB").DateTimeFormat);
+                var ddtEndDate = Convert.ToDateTime(dateRange.EndDate, System.Globalization.CultureInfo.GetCultureInfo("en-GB").DateTimeFormat);
                 var agentCode = User.Identity.GetAgentCode();
-                string html = "<html><body>Welcome<table><thead><th>Id</th><th>Order Id</th><th>Agent Code</th><th>Selling Price</th><th>Commission</th></thead><tbody>";
+                
+                string html = "<html><style type=\"text/css\">table, th, td {border: 1px solid black;border-collapse: collapse;}</style><body><div><img src=\""+ConfigurationManager.AppSettings["imgCdn"].ToString()+"/Images/logo.png\" /></div><br/><div>Burial Plots Sales Report<div><br/><div>From Date: " 
+                                                            + ddtStartDate.Date + "</div><br/><div>To Date: " + ddtEndDate.Date +  
+                                                            "<br/><br/><br/><table style=\"border:1; width: 100%\"><tbody><tr><td>Order Id</td><td>Agent Code</td><td>Selling Price</td><td>Commission</td></tr>";
 
                 using (var context = new ApplicationDbContext())
                 {
                     List<SalesTransaction> sales = null;
-                    sales = context.SalesTransactions.Where(r => r.AgentCode.Equals(agentCode))
-                                                                //&& (r.SaleDate >= ddtStartDate.Date) && (r.SaleDate <= ddtEndDate.Date))
+                    double totalCommission = 0;
+
+                    sales = context.SalesTransactions.Where(r => r.AgentCode.Equals(agentCode)
+                                                                && (r.SaleDate >= ddtStartDate.Date) && (r.SaleDate <= ddtEndDate.Date))
                                                     .ToList();
 
                     foreach (var item in sales)
                     {
-                        html += "<tr><td>" + item.OrderId + "</td><td>" + item.AgentCode + "</td><td>" + item.PorpSellingPrice + "</td><td>" + item.Commission + "</td></tr>";
+                        html += "<tr><td>" + item.OrderId + "</td><td>" + item.AgentCode + "</td><td>&pound; " + item.PorpSellingPrice + "</td><td>&pound; " + item.Commission + "</td></tr>";
+                        totalCommission += Convert.ToDouble(item.Commission);
                     }
 
-                    html += "</tbody></table></body</html>";
+                    html += "</tbody></table><br/><div>Total Commission: &pound; " + totalCommission + "</div></body</html>";
                 }
                 using (MemoryStream ms = new MemoryStream())
                 {
