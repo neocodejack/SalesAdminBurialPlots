@@ -117,18 +117,24 @@ namespace SalesAdminPortal.Controllers
         [Route("api/sales/commissionbydate/")]
         public HttpResponseMessage CommissionByDate(DateRange dateRange)
         {
-            var ddtStartDate = Convert.ToDateTime(dateRange.StartDate);
-            var ddtEndDate = Convert.ToDateTime(dateRange.EndDate);
-            var agentCode = User.Identity.GetAgentCode();
-            List<SalesTransaction> response = new List<SalesTransaction>();
-
-            using (var context = new ApplicationDbContext())
+            try
             {
-                List<SalesTransaction> sales = null;
-                sales = context.SalesTransactions.Where(r => r.AgentCode.StartsWith(agentCode)
-                                                            && (r.SaleDate >= ddtStartDate.Date) && (r.SaleDate <= ddtEndDate.Date))
-                                                .ToList();
-                return Request.CreateResponse(HttpStatusCode.OK, sales);
+                var ddtStartDate = Convert.ToDateTime(dateRange.StartDate);
+                var ddtEndDate = Convert.ToDateTime(dateRange.EndDate);
+                var agentCode = User.Identity.GetAgentCode();
+                List<SalesTransaction> response = new List<SalesTransaction>();
+
+                using (var context = new ApplicationDbContext())
+                {
+                    List<SalesTransaction> sales = null;
+                    sales = context.SalesTransactions.Where(r => r.AgentCode.StartsWith(agentCode)
+                                                                && (r.SaleDate >= ddtStartDate.Date) && (r.SaleDate <= ddtEndDate.Date))
+                                                    .ToList();
+                    return Request.CreateResponse(HttpStatusCode.OK, sales);
+                }
+            }catch(Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
             }
         }
 
