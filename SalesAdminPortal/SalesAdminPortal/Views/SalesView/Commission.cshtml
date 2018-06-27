@@ -10,13 +10,14 @@
 <script type="text/javascript">
     //Code to call api and Display Sales Earning Monthwise
     $(document).ready(function () {
-        var dateFormat = "yyyy/mm/dd",
+        var dateFormat = "dd/mm/y",
             from = $("#from")
                 .datepicker({
                     defaultDate: "+1w",
                     changeMonth: true,
                     changeYear: true,
-                    numberOfMonths: 1
+                    numberOfMonths: 1,
+                    dateFormat: dateFormat
                 })
                 .on("change", function () {
                     to.datepicker("option", "minDate", getDate(this));
@@ -25,7 +26,8 @@
                 defaultDate: "+1w",
                 changeMonth: true,
                 changeYear: true,
-                numberOfMonths: 1
+                numberOfMonths: 1,
+                dateFormat: dateFormat
             })
                 .on("change", function () {
                     from.datepicker("option", "maxDate", getDate(this));
