@@ -127,10 +127,28 @@ namespace SalesAdminPortal.Controllers
                 using (var context = new ApplicationDbContext())
                 {
                     List<SalesTransaction> sales = null;
-                    sales = context.SalesTransactions.Where(r => r.AgentCode.StartsWith(agentCode)
-                                                                && (r.SaleDate >= ddtStartDate.Date) && (r.SaleDate <= ddtEndDate.Date))
-                                                    .ToList();
-                    return Request.CreateResponse(HttpStatusCode.OK, sales);
+                    
+                    if (agentCode.Contains('-'))
+                    {
+                        sales = context.SalesTransactions.Where(r => r.AgentCode.StartsWith(agentCode))
+                                                        //&& (r.SaleDate >= ddtStartDate.Date) && (r.SaleDate <= ddtEndDate.Date))
+                                                        .ToList();
+                    }
+                    else
+                    {
+                        sales = context.SalesTransactions.Where(r => r.AgentCode.Equals(agentCode))
+                                                        //&& (r.SaleDate >= ddtStartDate.Date) && (r.SaleDate <= ddtEndDate.Date))
+                                                        .ToList();
+                    }
+
+                    foreach(var item in sales)
+                    {
+                        if((item.SaleDate.Date>=ddtStartDate.Date) && (item.SaleDate.Date <= ddtEndDate.Date))
+                        {
+                            response.Add(item);
+                        }
+                    }
+                    return Request.CreateResponse(HttpStatusCode.OK, response);
                 }
             }catch(Exception ex)
             {
