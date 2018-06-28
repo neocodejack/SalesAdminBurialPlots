@@ -170,6 +170,8 @@ namespace SalesAdminPortal.Controllers
                 {
                     List<SalesTransaction> sales = null;
                     double totalCommission = 0;
+                    double paidCommission = 0;
+                    double unpaidCommission = 0;
 
                     sales = context.SalesTransactions.Where(r => r.AgentCode.Equals(agentCode)
                                                                 && (r.SaleDate >= ddtStartDate.Date) && (r.SaleDate <= ddtEndDate.Date))
@@ -179,9 +181,14 @@ namespace SalesAdminPortal.Controllers
                     {
                         html += "<tr><td>" + item.OrderId + "</td><td>" + item.AgentCode + "</td><td>&pound; " + item.PorpSellingPrice + "</td><td>&pound; " + item.Commission + "</td></tr>";
                         totalCommission += Convert.ToDouble(item.Commission);
+                        if (item.IsCommissionPaid)
+                            paidCommission += Convert.ToDouble(item.Commission);
+                        else
+                            unpaidCommission += Convert.ToDouble(item.Commission);
                     }
 
-                    html += "</tbody></table><br/><div>Total Commission: &pound; " + totalCommission + "</div></body</html>";
+                    html += "</tbody></table><br/><div>Total Commission: &pound; " + totalCommission + "</div><br/><div>Paid Commission: &pound;" + 
+                        paidCommission + "</div><br/><div>Unpaid Commission: &pound;" + unpaidCommission + "</div></body</html>";
                 }
                 using (MemoryStream ms = new MemoryStream())
                 {

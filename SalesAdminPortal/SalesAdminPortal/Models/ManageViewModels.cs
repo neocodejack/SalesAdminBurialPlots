@@ -114,4 +114,5 @@ namespace SalesAdminPortal.Models
         [UIHint("tinymce_full"), System.Web.Mvc.AllowHtml]
         public string Description { get; set; }
     }
+
 }
