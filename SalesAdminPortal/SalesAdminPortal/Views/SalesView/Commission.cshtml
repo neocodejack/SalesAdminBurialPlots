@@ -63,10 +63,10 @@
                 type: "POST",
                 url: url + "api/sales/commissionbydate",
                 contentType: "application/json",
-                data: {
+                data: JSON.stringify({
                     "StartDate": $("#from").val(),
                     "EndDate": $("#to").val()
-                },
+                }),
                 success: function (response) {
                     var tr_str = "";
                     for (var j = 0; j < response.length; j++) {
