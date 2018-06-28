@@ -53,6 +53,7 @@ namespace SalesAdminPortal.Models
 
         public virtual DbSet<SalesTransaction> SalesTransactions { get; set; }
         public virtual DbSet<DashboardFeed> DashboardFeeds { get; set; }
+        public virtual DbSet<AgentCommission> Commissions { get; set; }
 
         public static ApplicationDbContext Create()
         {
@@ -76,6 +77,7 @@ namespace SalesAdminPortal.Models
 
         public DateTime SaleDate { get; set; }
         
+        public bool IsCommissionPaid { get; set; }
     }
 
     public class DashboardFeed
@@ -93,5 +95,19 @@ namespace SalesAdminPortal.Models
         public bool IsPublished { get; set; }
 
         public DateTime PublishDate { get; set; }
+    }
+
+    public class AgentCommission
+    {
+        [Required]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int CommissionId { get; set; }
+
+        [Required]
+        public string AgentCode { get; set; }
+
+        [Required]
+        public double CommissionPercent { get; set; }
     }
 }

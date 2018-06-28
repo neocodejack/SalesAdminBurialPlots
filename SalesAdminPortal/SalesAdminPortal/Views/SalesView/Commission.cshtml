@@ -10,6 +10,7 @@
 <script type="text/javascript">
     //Code to call api and Display Sales Earning Monthwise
     $(document).ready(function () {
+        $(".table-responsive").hide();
         var dateFormat = "dd/mm/y",
             from = $("#from")
                 .datepicker({
@@ -58,15 +59,18 @@
 
         $("#btnReport").click(function (evt) {
             var total = 0;
+            var paid = 0;
+            var unpaid = 0;
+
             var url = "@ConfigurationManager.AppSettings["serviceUrl"].ToString()";
             $.ajax({
                 type: "POST",
                 url: url + "api/sales/commissionbydate",
                 contentType: "application/json",
-                data: {
+                data: JSON.stringify({
                     "StartDate": $("#from").val(),
                     "EndDate": $("#to").val()
-                },
+                }),
                 success: function (response) {
                     var tr_str = "";
                     for (var j = 0; j < response.length; j++) {
@@ -86,10 +90,18 @@
                             "<td>" + Commission + "</td>" +
                             "</tr>";
                         total += parseInt(Commission);
+                        if (response[j].IsCommissionPaid == 1) {
+                            paid += parseInt(Commission);
+                        } else {
+                            unpaid += parseInt(Commission);
+                        }
                     }
 
                     $("#tableBody").html(tr_str);
                     $("#totalEarning").html(total);
+                    $("#paidEarning").html(paid);
+                    $("#unpaidEarning").html(unpaid);
+                    $(".table-responsive").show();
                 }
             });
         });
@@ -101,7 +113,7 @@
     Code to populate the text boxes and grid to display as per search record.
 -->
 <div class="table-agile-info">
-    <div class="panel panel-default">
+    <div class="panel panel-default" style="height:80%">
         <div class="panel-heading">
             Commission Book
         </div>
@@ -136,9 +148,19 @@
                 </thead>
                 <tbody id="tableBody"></tbody>
             </table>
-            <div class="" style="float:right">
+            <div class="" style="float:right; padding-right:5px;">
                 <label for="total">Total Commission:</label>
                 <label id="totalEarning"></label>
+            </div>
+            <br/>
+            <div class="" style="float:right; padding-right:5px;">
+                <label for="total">Paid Commission:</label>
+                <label id="paidEarning"></label>
+            </div>
+            <br/>
+            <div class="" style="float:right; padding-right:5px;">
+                <label for="total">Unpaid Commission:</label>
+                <label id="unpaidEarning"></label>
             </div>
         </div>
     </div>

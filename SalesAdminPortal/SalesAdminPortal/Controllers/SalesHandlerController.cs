@@ -123,33 +123,25 @@ namespace SalesAdminPortal.Controllers
                 var ddtStartDate = Convert.ToDateTime(dateRange.StartDate, System.Globalization.CultureInfo.GetCultureInfo("en-GB").DateTimeFormat);
                 var ddtEndDate = Convert.ToDateTime(dateRange.EndDate, System.Globalization.CultureInfo.GetCultureInfo("en-GB").DateTimeFormat);
                 var agentCode = User.Identity.GetAgentCode();
-                List<SalesTransaction> response = new List<SalesTransaction>();
 
                 using (var context = new ApplicationDbContext())
                 {
                     List<SalesTransaction> sales = null;
                     
-                    if (agentCode.Contains('-'))
+                    if (!agentCode.Contains('-'))
                     {
-                        sales = context.SalesTransactions.Where(r => r.AgentCode.StartsWith(agentCode))
-                                                        //&& (r.SaleDate >= ddtStartDate.Date) && (r.SaleDate <= ddtEndDate.Date))
+                        sales = context.SalesTransactions.Where(r => r.AgentCode.StartsWith(agentCode)
+                                                        && (r.SaleDate >= ddtStartDate.Date) && (r.SaleDate <= ddtEndDate.Date))
                                                         .ToList();
                     }
                     else
                     {
-                        sales = context.SalesTransactions.Where(r => r.AgentCode.Equals(agentCode))
-                                                        //&& (r.SaleDate >= ddtStartDate.Date) && (r.SaleDate <= ddtEndDate.Date))
+                        sales = context.SalesTransactions.Where(r => r.AgentCode.Equals(agentCode)
+                                                        && (r.SaleDate >= ddtStartDate.Date) && (r.SaleDate <= ddtEndDate.Date))
                                                         .ToList();
                     }
 
-                    foreach(var item in sales)
-                    {
-                        if((item.SaleDate.Date>=ddtStartDate.Date) && (item.SaleDate.Date <= ddtEndDate.Date))
-                        {
-                            response.Add(item);
-                        }
-                    }
-                    return Request.CreateResponse(HttpStatusCode.OK, response);
+                    return Request.CreateResponse(HttpStatusCode.OK, sales);
                 }
             }catch(Exception ex)
             {
@@ -178,6 +170,8 @@ namespace SalesAdminPortal.Controllers
                 {
                     List<SalesTransaction> sales = null;
                     double totalCommission = 0;
+                    double paidCommission = 0;
+                    double unpaidCommission = 0;
 
                     sales = context.SalesTransactions.Where(r => r.AgentCode.Equals(agentCode)
                                                                 && (r.SaleDate >= ddtStartDate.Date) && (r.SaleDate <= ddtEndDate.Date))
@@ -187,9 +181,14 @@ namespace SalesAdminPortal.Controllers
                     {
                         html += "<tr><td>" + item.OrderId + "</td><td>" + item.AgentCode + "</td><td>&pound; " + item.PorpSellingPrice + "</td><td>&pound; " + item.Commission + "</td></tr>";
                         totalCommission += Convert.ToDouble(item.Commission);
+                        if (item.IsCommissionPaid)
+                            paidCommission += Convert.ToDouble(item.Commission);
+                        else
+                            unpaidCommission += Convert.ToDouble(item.Commission);
                     }
 
-                    html += "</tbody></table><br/><div>Total Commission: &pound; " + totalCommission + "</div></body</html>";
+                    html += "</tbody></table><br/><div>Total Commission: &pound; " + totalCommission + "</div><br/><div>Paid Commission: &pound;" + 
+                        paidCommission + "</div><br/><div>Unpaid Commission: &pound;" + unpaidCommission + "</div></body</html>";
                 }
                 using (MemoryStream ms = new MemoryStream())
                 {
