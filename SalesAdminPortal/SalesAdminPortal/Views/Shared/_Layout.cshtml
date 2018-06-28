@@ -55,12 +55,16 @@
                     <ul class="sidebar-menu" id="nav-accordion">
                         @if (!User.Identity.IsSuperAdmin().Equals("M"))
                         {
-                            <li>
-                                <a class="active" href="@Url.Action("Index", "Home")">
-                                    <i class="fa fa-dashboard"></i>
-                                    <span>Dashboard</span>
-                                </a>
-                            </li>
+                        <li>
+                            <a class="active" href="@Url.Action("Index", "Home")">
+                                <i class="fa fa-dashboard"></i>
+                                <span>News Dashboard</span>
+                            </a>
+                            <a class="active" href="@Url.Action("Index", "Home")">
+                                <i class="fa fa-file"></i>
+                                <span>Documents Download</span>
+                            </a>
+                        </li>
 
                             <li class="sub-menu">
                                 <a href="javascript:;">
@@ -101,6 +105,23 @@
                                 <ul class="sub">
                                     <li>
                                         <a href="@Url.Action("Register", "Account")">Add Sales Manager</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="sub-menu">
+                                <a href="javascript:;">
+                                    <i class="fa fa-users"></i>
+                                    <span>Portal Management</span>
+                                </a>
+                                <ul class="sub">
+                                    <li>
+                                        <a href="@Url.Action("Index", "NewsFeed")">Add News</a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("View", "NewsFeed")">View News</a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Upload", "Document")">Upload Document</a>
                                     </li>
                                 </ul>
                             </li>

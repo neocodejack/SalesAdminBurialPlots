@@ -62,6 +62,7 @@
             $.ajax({
                 type: "POST",
                 url: url + "api/sales/commissionbydate",
+                contentType: "application/json",
                 data: {
                     "StartDate": $("#from").val(),
                     "EndDate": $("#to").val()

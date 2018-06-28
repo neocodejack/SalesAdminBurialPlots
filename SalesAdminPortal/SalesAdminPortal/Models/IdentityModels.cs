@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
@@ -89,6 +90,8 @@ namespace SalesAdminPortal.Models
         [Required]
         public string Description { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public bool IsPublished { get; set; }
+
+        public DateTime PublishDate { get; set; }
     }
 }

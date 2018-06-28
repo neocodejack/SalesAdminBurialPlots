@@ -102,4 +102,16 @@ namespace SalesAdminPortal.Models
         public string AgentCode { get; set; }
 
     }
+
+    public class Feed
+    {
+        [Required]
+        [Display(Name="News Name")]
+        public string Name { get; set; }
+
+        [Required]
+        [Display(Name="News Description")]
+        [UIHint("tinymce_full"), System.Web.Mvc.AllowHtml]
+        public string Description { get; set; }
+    }
 }
