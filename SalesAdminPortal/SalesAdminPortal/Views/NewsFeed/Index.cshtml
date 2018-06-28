@@ -1,7 +1,37 @@
-﻿
+﻿@model SalesAdminPortal.Models.Feed
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+@using (Html.BeginForm("Index", "NewsFeed", FormMethod.Post))
+{
+    <table cellspacing="10">
+        <tr>
+            <td colspan="2">
+                <span style="color:red; font-weight:bold">@ViewBag.Status</span>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:173px">
+                @Html.LabelFor(m => m.Name, new { @class = "col-md-4 control-label", @style="width:132px" })
+            </td>
+            <td>
+                @Html.TextBoxFor(m=>m.Name)
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" style="width:173px">
+                @Html.LabelFor(m => m.Description, new { @class = "col-md-4 control-label",@style="width:170px" })
+            </td>
+            <td>
+                @Html.EditorFor(editor => editor.Description)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="right">
+                <input type="submit" class="btn btn-primary" value="Submit">
+            </td>
+        </tr>
+    </table>
+}
 
