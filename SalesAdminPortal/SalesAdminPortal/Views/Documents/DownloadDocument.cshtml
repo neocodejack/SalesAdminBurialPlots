@@ -1,0 +1,48 @@
+﻿
+@{
+    ViewBag.Title = "Download Document";
+}
+
+<script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-ajax-downloader@1.1.0/src/ajaxdownloader.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "@Url.Action("DocumentsList", "Documents")",
+            success: function (response) {
+                var html = "";
+
+                for (var i = 0; i < response.length; i++) {
+                    html += "<option value='" + response[i] +"'> " + response[i] + "</option >";
+                }
+                $("#drpDocuments").html(html);
+            }
+
+        });
+
+        $("#btnPdf").click(function (evt) {
+            var url = "@Url.Action("DownloadFile", "Documents")";
+            
+            $.AjaxDownloader({
+                url: url,
+                data: {
+                    "fileName": $("#drpDocuments").val()
+                }
+            });
+        });
+    });
+</script>
+<table>
+    <tr>
+        <td>Select a document</td>
+        <td><select id="drpDocuments"></select></td>
+    </tr>
+    <tr>
+        <td>
+
+        </td>
+        <td>
+            <input type="button" id="btnPdf" value="Download"/>
+        </td>
+    </tr>
+</table>

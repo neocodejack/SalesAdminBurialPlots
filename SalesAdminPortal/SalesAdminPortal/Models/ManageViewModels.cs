@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Web;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
@@ -101,6 +102,26 @@ namespace SalesAdminPortal.Models
         [Required]
         public string AgentCode { get; set; }
 
+    }
+
+    public class DocumentModel
+    {
+        [Required]
+        [Display(Name="Document Id")]
+        public int DocumentId { get; set; }
+
+        [Required]
+        [Display(Name = "Document Name")]
+        public string Name { get; set; }
+
+        [Required]
+        [Display(Name = "Choose Type")]
+        public string DocType { get; set; }
+
+        [UIHint("tinymce_full"), System.Web.Mvc.AllowHtml]
+        public string Content { get; set; }
+
+        public HttpPostedFile File { get; set; }
     }
 
     public class Feed
