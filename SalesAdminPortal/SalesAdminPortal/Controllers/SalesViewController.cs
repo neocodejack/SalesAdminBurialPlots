@@ -14,7 +14,6 @@ namespace SalesAdminPortal.Controllers
     [Authorize]
     public class SalesViewController : Controller
     {
-        // GET: SalesView
         public ActionResult Index()
         {
             return View();
@@ -26,6 +25,11 @@ namespace SalesAdminPortal.Controllers
         }
 
         public ActionResult CommissionStatusUpdate()
+        {
+            return View();
+        }
+
+        public ActionResult AssignPercent()
         {
             return View();
         }

@@ -29,13 +29,12 @@ namespace SalesAdminPortal.Controllers
             using(var context = new ApplicationDbContext())
             {
                 var entity = context.Commissions.Where(r => r.AgentCode == commission.AgentCode).FirstOrDefault();
-                if ((entity!=null) && (entity.CommissionId == commission.CommissionId))
+                if (entity != null)
                 {
                     entity.CommissionPercent = commission.CommissionPercent;
                 }
                 else   //New Record
                 {
-                    commission.CommissionId = entity.CommissionId;
                     context.Commissions.Add(commission);
                 }
 
@@ -44,11 +43,22 @@ namespace SalesAdminPortal.Controllers
         }
 
         [HttpGet]
+        [Route("api/commissionbyagent/{agentCode}")]
+        public HttpResponseMessage CommissionByAgent(string agentCode)
+        {
+            using(var context = new ApplicationDbContext())
+            {
+                var commission = context.Commissions.Where(r => r.AgentCode.Equals(agentCode)).Select(s => s.CommissionPercent).FirstOrDefault();
+                return Request.CreateResponse(HttpStatusCode.OK, commission);
+            }
+        }
+
+        [HttpGet]
         [Route("api/agentlist/")]
         public HttpResponseMessage AgentList()
         {
             var agentList = new List<string>();
-            if (User.Identity.GetAccountType().Equals("M"))
+            if (User.Identity.IsSuperAdmin().Equals("M"))
             {
                 using(var context = new ApplicationDbContext())
                 {
@@ -61,7 +71,7 @@ namespace SalesAdminPortal.Controllers
                 {
                     var currentAgentCode = User.Identity.GetAgentCode();
 
-                    agentList = context.Users.Where(r => r.AgentCode.StartsWith(currentAgentCode)).Select(r => r.AgentCode).ToList();
+                    agentList = context.Users.Where(r => r.AgentCode.StartsWith(currentAgentCode) && !r.IsMasterAgent).Select(r => r.AgentCode).ToList();
                 }
             }
 

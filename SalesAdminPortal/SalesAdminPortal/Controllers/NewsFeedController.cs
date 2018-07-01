@@ -34,9 +34,25 @@ namespace SalesAdminPortal.Controllers
         [HttpGet]
         public ActionResult ViewFeeds()
         {
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult PublishedFeeds()
+        {
             using (var context = new ApplicationDbContext())
             {
-                var feeds = context.DashboardFeeds.Where(r => !r.IsPublished).ToList();
+                var feeds = context.DashboardFeeds.Where(r => r.IsPublished).ToList();
+                return Json(feeds, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult ListAllFeeds()
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                var feeds = context.DashboardFeeds.ToList();
                 return Json(feeds, JsonRequestBehavior.AllowGet);
             }
         }
@@ -47,7 +63,10 @@ namespace SalesAdminPortal.Controllers
             using(var context = new ApplicationDbContext())
             {
                 var entity = context.DashboardFeeds.Find(feedId);
-                entity.IsPublished = true;
+                if (entity.IsPublished)
+                    entity.IsPublished = false;
+                else
+                    entity.IsPublished = true;
                 return Json(context.SaveChanges(), JsonRequestBehavior.AllowGet);
             }
         }

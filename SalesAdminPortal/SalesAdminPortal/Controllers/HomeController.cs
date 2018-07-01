@@ -20,9 +20,9 @@ namespace SalesAdminPortal.Controllers
             }
             else
             {
-                return RedirectToAction("Index", "SalesView");
+                return View();
             }
-            return View();
+            
         }
 
         public ActionResult About()

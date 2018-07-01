@@ -1,0 +1,63 @@
+﻿@using System.Configuration
+@{
+    ViewBag.Title = "Assign Percent";
+}
+<script type="text/javascript">
+    $(document).ready(function (evnt) {
+        $.ajax({
+            type: "GET",
+            url: "@ConfigurationManager.AppSettings["serviceUrl"].ToString()api/agentlist/",
+            success: function (response) {
+                var html = "";
+
+                for (var i = 0; i < response.length; i++) {
+                    html += "<option value='" + response[i] +"'> " + response[i] + "</option >";
+                }
+                $("#drpAgents").append(html);
+            }
+
+        });
+
+        $("#btnAssign").click(function (evnt) {
+            $.ajax({
+                url: "@ConfigurationManager.AppSettings["serviceUrl"].ToString()api/commission/",
+                type: "POST",
+                data: { "AgentCode": $("#drpAgents").val(), "CommissionPercent": $("#txtCommission").val() },
+                success: function (response) {
+
+                }
+            });
+        });
+
+        $("#drpAgents").change(function (evnt) {
+            if ($(this).val() != "") {
+                $.ajax({
+                    url: "@ConfigurationManager.AppSettings["serviceUrl"].ToString()api/commissionbyagent/" + $(this).val(),
+                    type: "GET",
+                    success: function (response) {
+                        $("#txtCommission").val(response);
+                    }
+                });
+            }
+        });
+    });
+</script>
+<table cellspacing="10">
+    <tr>
+        <td><label class="col-md-4 control-label" style="width:135px">Select Agent</label></td>
+        <td>
+            <select id="drpAgents">
+                <option value="">---Select---</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td><label class="col-md-4 control-label">Commission</label></td>
+        <td><input type="text" name="txtCommission" id="txtCommission" value=""/></td>
+    </tr>
+    <tr>
+        <td colspan="2" align="right">
+            <input type="button" id="btnAssign" class="btn btn-primary" value="Assign" />
+        </td>
+    </tr>
+</table>

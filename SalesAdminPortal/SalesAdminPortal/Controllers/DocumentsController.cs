@@ -14,16 +14,10 @@ namespace SalesAdminPortal.Controllers
         public ActionResult UploadDocument()
         {
             var model = new DocumentModel();
-
-            ViewBag.DocType = new List<string>
-            {
-                "Content",
-                "File"
-            };
-
             return View(model);
         }
 
+        [HttpGet]
         public ActionResult DownloadDocument()
         {
             return View();
@@ -32,8 +26,12 @@ namespace SalesAdminPortal.Controllers
         [HttpPost]
         public ActionResult UploadFile(DocumentModel doc)
         {
-            var document = new Document();
-            document.DocumentId = doc.DocumentId;
+            var document = new Document
+            {
+                DocumentId = doc.DocumentId,
+                DocumentName = doc.Name,
+                DocType = doc.DocType
+            };
 
             if (doc.DocType == "Content")
             {
@@ -62,7 +60,7 @@ namespace SalesAdminPortal.Controllers
                     var entity = context.Documents.Where(r => r.DocumentId.Equals(document.DocumentId)).FirstOrDefault();
                     entity.DocumentName = document.DocumentName;
 
-                    if (doc.DocType == "Content")
+                    if (doc.DocType == "File")
                         entity.Path = document.Path;
                     else
                         entity.Content = document.Content;
@@ -70,7 +68,7 @@ namespace SalesAdminPortal.Controllers
                 context.SaveChanges();
             }
 
-            return View();
+            return View("UploadDocument");
         }
 
         [HttpPost]

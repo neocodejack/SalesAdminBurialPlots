@@ -121,7 +121,7 @@ namespace SalesAdminPortal.Models
         [UIHint("tinymce_full"), System.Web.Mvc.AllowHtml]
         public string Content { get; set; }
 
-        public HttpPostedFile File { get; set; }
+        public HttpPostedFileBase File { get; set; }
     }
 
     public class Feed

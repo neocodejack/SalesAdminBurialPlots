@@ -31,7 +31,7 @@ namespace SalesAdminPortal.Controllers
                         agentCommission = context.Commissions.Where(r => r.AgentCode.Equals(sale.AgentCode)).Select(r => r.CommissionPercent).FirstOrDefault();
                     }
 
-                    var commission = (Convert.ToDouble(sale.SellingPrice) * agentCommission) / 100;
+                    var commission = Math.Round(((Convert.ToDouble(sale.SellingPrice) * agentCommission) / 100), 2);
                     
                     var objSaleTransaction = new SalesTransaction { AgentCode = sale.AgentCode, OrderId = sale.OrderId, PorpSellingPrice = sale.SellingPrice, Commission = commission.ToString(), SaleDate = DateTime.Now };
                     using (var context = new ApplicationDbContext())
