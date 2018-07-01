@@ -1,0 +1,71 @@
+﻿@model SalesAdminPortal.Models.DocumentModel
+@{
+    ViewBag.Title = "Upload Document";
+}
+@using (Html.BeginForm("UploadFile", "Documents", FormMethod.Post, new { enctype = "multipart/form-data"}))
+{
+    <table cellspacing="20">
+        <tr>
+            <td colspan="2">
+                <span style="color:red; font-weight:bold">@ViewBag.Status</span>
+            </td>
+        </tr>
+        <tr>
+            <td style="width:173px">
+                @Html.LabelFor(m => m.Name, new { @class = "col-md-4 control-label", @style = "width:200px" })
+            </td>
+            <td>
+                @Html.TextBoxFor(m => m.Name)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(m=>m.DocType, new { @class = "col-md-4 control-label", @style = "width:200px" })
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.DocType,
+                           new List<SelectListItem> {
+                           new SelectListItem { Value = "Select" , Text = "---Select---" },
+                           new SelectListItem { Value = "Content" , Text = "Content" },
+                           new SelectListItem { Value = "File" , Text = "File" }
+                     },
+                    new { @class = "myselect", @id="drpContentType" })
+            </td>
+        </tr>
+        <tr id="file" style="display:none">
+            <td valign="top" style="width:173px">
+                <label class="col-md-4 control-label" style="width:200px">Choose File</label>
+            </td>
+            <td>
+                <input type="file" name="File"/>
+            </td>
+        </tr>
+        <tr id="content" style="display:none">
+            <td>
+                @Html.LabelFor(m => m.Content, new { @class = "col-md-4 control-label", @style = "width:170px" })
+            </td>
+            <td>
+                @Html.EditorFor(editor => editor.Content)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="right">
+                <input type="submit" class="btn btn-primary" value="Submit">
+            </td>
+        </tr>
+    </table>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#drpContentType").change(function () {
+            if ($(this).val() == "Content") {
+                $("#content").show();
+                $("#file").hide();
+            } else {
+                $("#file").show();
+                $("#content").hide();
+            }
+        });
+    });
+</script>

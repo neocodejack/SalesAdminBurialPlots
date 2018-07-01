@@ -23,7 +23,15 @@ namespace SalesAdminPortal.Controllers
             {
                 try
                 {
-                    var commission = (Convert.ToDouble(sale.SellingPrice) * 20) / 100;
+                    //Get the commission percent
+                    double agentCommission = 0;
+                    
+                    using(var context = new ApplicationDbContext())
+                    {
+                        agentCommission = context.Commissions.Where(r => r.AgentCode.Equals(sale.AgentCode)).Select(r => r.CommissionPercent).FirstOrDefault();
+                    }
+
+                    var commission = Math.Round(((Convert.ToDouble(sale.SellingPrice) * agentCommission) / 100), 2);
                     
                     var objSaleTransaction = new SalesTransaction { AgentCode = sale.AgentCode, OrderId = sale.OrderId, PorpSellingPrice = sale.SellingPrice, Commission = commission.ToString(), SaleDate = DateTime.Now };
                     using (var context = new ApplicationDbContext())
@@ -60,14 +68,21 @@ namespace SalesAdminPortal.Controllers
             {
                 List<SalesTransaction> salesTransaction = null;
                 var currentAgentCode = User.Identity.GetAgentCode();
-                if (User.Identity.GetAccountType().Equals("A")) //An Agent
+                if (!string.IsNullOrEmpty(currentAgentCode))
                 {
-                    salesTransaction = context.SalesTransactions.Where(r => r.AgentCode.Equals(currentAgentCode)).ToList();
+                    if (User.Identity.GetAccountType().Equals("A")) //An Agent
+                    {
+                        salesTransaction = context.SalesTransactions.Where(r => r.AgentCode.Equals(currentAgentCode)).ToList();
+                    }
+                    else if (User.Identity.GetAccountType().Equals("SM"))
+                    {
+                        //Get All the records for agents under the same master agent
+                        salesTransaction = context.SalesTransactions.Where(r => r.AgentCode.StartsWith(currentAgentCode)).ToList();
+                    }
                 }
                 else
                 {
-                    //Get All the records for agents under the same master agent
-                    salesTransaction = context.SalesTransactions.Where(r => r.AgentCode.StartsWith(currentAgentCode)).ToList();
+                    salesTransaction = context.SalesTransactions.Where(r => !r.IsCommissionPaid).ToList();
                 }
                 
                 return Request.CreateResponse(HttpStatusCode.OK, salesTransaction);
@@ -113,7 +128,7 @@ namespace SalesAdminPortal.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         [Route("api/sales/commissionbydate/")]
         public HttpResponseMessage CommissionByDate(DateRange dateRange)
@@ -149,7 +164,7 @@ namespace SalesAdminPortal.Controllers
             }
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         [Route("api/sales/downloadpdf/")]
         public HttpResponseMessage ExportToPdf(DateRange dateRange)
@@ -187,7 +202,7 @@ namespace SalesAdminPortal.Controllers
                             unpaidCommission += Convert.ToDouble(item.Commission);
                     }
 
-                    html += "</tbody></table><br/><div>Total Commission: &pound; " + totalCommission + "</div><br/><div>Paid Commission: &pound;" + 
+                    html += "</tbody></table><br/><div>Total Commission: &pound;" + totalCommission + "</div><br/><div>Paid Commission: &pound;" + 
                         paidCommission + "</div><br/><div>Unpaid Commission: &pound;" + unpaidCommission + "</div></body</html>";
                 }
                 using (MemoryStream ms = new MemoryStream())
@@ -213,6 +228,18 @@ namespace SalesAdminPortal.Controllers
             }catch(Exception ex)
             {
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
+            }
+        }
+
+        [HttpPost]
+        [Route("api/sales/updatedPayment/{salesId}")]
+        public HttpResponseMessage UpdatePayment(int salesId)
+        {
+            using(var context = new ApplicationDbContext())
+            {
+                var sale = context.SalesTransactions.Where(r => r.Id == salesId).FirstOrDefault();
+                sale.IsCommissionPaid = true;
+                return Request.CreateResponse(HttpStatusCode.OK, context.SaveChanges());
             }
         }
     }

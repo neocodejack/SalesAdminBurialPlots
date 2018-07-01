@@ -54,6 +54,7 @@ namespace SalesAdminPortal.Models
         public virtual DbSet<SalesTransaction> SalesTransactions { get; set; }
         public virtual DbSet<DashboardFeed> DashboardFeeds { get; set; }
         public virtual DbSet<AgentCommission> Commissions { get; set; }
+        public virtual DbSet<Document> Documents { get; set; }
 
         public static ApplicationDbContext Create()
         {
@@ -109,5 +110,23 @@ namespace SalesAdminPortal.Models
 
         [Required]
         public double CommissionPercent { get; set; }
+    }
+
+    public class Document
+    {
+        [Required]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int DocumentId { get; set; }
+
+        [Required]
+        public string DocumentName { get; set; }
+
+        [Required]
+        public string DocType { get; set; }
+
+        public string Path { get; set; }
+
+        public string Content { get; set; }
     }
 }

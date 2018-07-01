@@ -38,7 +38,6 @@
                             <b class="caret"></b>
                         </a>
                         <ul class="dropdown-menu extended logout">
-                            @*<li><a href="#"><i class=" fa fa-suitcase"></i>Profile</a></li>*@
                             <li><a href="javascript:document.getElementById('logoutForm').submit()"><i class="fa fa-key"></i> Log Out</a></li>
                         </ul>
                     </li>
@@ -60,7 +59,7 @@
                                 <i class="fa fa-dashboard"></i>
                                 <span>News Dashboard</span>
                             </a>
-                            <a class="active" href="@Url.Action("Index", "Home")">
+                            <a class="active" href="@Url.Action("DownloadDocument", "Documents")">
                                 <i class="fa fa-file"></i>
                                 <span>Documents Download</span>
                             </a>
@@ -91,6 +90,9 @@
                                     <li>
                                         <a href="@Url.Action("ManageUser","Account")">Manage Sales Agent</a>
                                     </li>
+                                    <li>
+                                        <a href="@Url.Action("AssignPercent","SalesView")">Add Commission</a>
+                                    </li>
                                 </ul>
                             </li>
                         }
@@ -106,6 +108,9 @@
                                     <li>
                                         <a href="@Url.Action("Register", "Account")">Add Sales Manager</a>
                                     </li>
+                                    <li>
+                                        <a href="@Url.Action("AssignPercent","SalesView")">Add Commission</a>
+                                    </li>
                                 </ul>
                             </li>
                             <li class="sub-menu">
@@ -118,10 +123,13 @@
                                         <a href="@Url.Action("Index", "NewsFeed")">Add News</a>
                                     </li>
                                     <li>
-                                        <a href="@Url.Action("View", "NewsFeed")">View News</a>
+                                        <a href="@Url.Action("ViewFeeds", "NewsFeed")">View News</a>
                                     </li>
                                     <li>
-                                        <a href="@Url.Action("Upload", "Document")">Upload Document</a>
+                                        <a href="@Url.Action("UploadDocument", "Documents")">Upload Document</a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("CommissionStatusUpdate", "SalesView")">Pay Commission</a>
                                     </li>
                                 </ul>
                             </li>
