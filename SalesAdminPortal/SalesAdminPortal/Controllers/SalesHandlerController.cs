@@ -68,14 +68,21 @@ namespace SalesAdminPortal.Controllers
             {
                 List<SalesTransaction> salesTransaction = null;
                 var currentAgentCode = User.Identity.GetAgentCode();
-                if (User.Identity.GetAccountType().Equals("A")) //An Agent
+                if (!string.IsNullOrEmpty(currentAgentCode))
                 {
-                    salesTransaction = context.SalesTransactions.Where(r => r.AgentCode.Equals(currentAgentCode)).ToList();
+                    if (User.Identity.GetAccountType().Equals("A")) //An Agent
+                    {
+                        salesTransaction = context.SalesTransactions.Where(r => r.AgentCode.Equals(currentAgentCode)).ToList();
+                    }
+                    else if (User.Identity.GetAccountType().Equals("SM"))
+                    {
+                        //Get All the records for agents under the same master agent
+                        salesTransaction = context.SalesTransactions.Where(r => r.AgentCode.StartsWith(currentAgentCode)).ToList();
+                    }
                 }
                 else
                 {
-                    //Get All the records for agents under the same master agent
-                    salesTransaction = context.SalesTransactions.Where(r => r.AgentCode.StartsWith(currentAgentCode)).ToList();
+                    salesTransaction = context.SalesTransactions.Where(r => !r.IsCommissionPaid).ToList();
                 }
                 
                 return Request.CreateResponse(HttpStatusCode.OK, salesTransaction);
@@ -195,7 +202,7 @@ namespace SalesAdminPortal.Controllers
                             unpaidCommission += Convert.ToDouble(item.Commission);
                     }
 
-                    html += "</tbody></table><br/><div>Total Commission: &pound; " + totalCommission + "</div><br/><div>Paid Commission: &pound;" + 
+                    html += "</tbody></table><br/><div>Total Commission: &pound;" + totalCommission + "</div><br/><div>Paid Commission: &pound;" + 
                         paidCommission + "</div><br/><div>Unpaid Commission: &pound;" + unpaidCommission + "</div></body</html>";
                 }
                 using (MemoryStream ms = new MemoryStream())
@@ -223,7 +230,6 @@ namespace SalesAdminPortal.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex);
             }
         }
-
 
         [HttpPost]
         [Route("api/sales/updatedPayment/{salesId}")]

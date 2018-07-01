@@ -761,6 +761,7 @@
     <Content Include="Views\Shared\EditorTemplates\tinymce_full.cshtml" />
     <Content Include="Views\Documents\UploadDocument.cshtml" />
     <Content Include="Views\Documents\DownloadDocument.cshtml" />
+    <Content Include="Views\SalesView\CommissionStatusUpdate.cshtml" />
     <None Include="Web.Production.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

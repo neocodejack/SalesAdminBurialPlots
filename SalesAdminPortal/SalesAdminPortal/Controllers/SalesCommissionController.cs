@@ -67,5 +67,6 @@ namespace SalesAdminPortal.Controllers
 
             return Request.CreateResponse(HttpStatusCode.OK, agentList);
         }
+
     }
 }

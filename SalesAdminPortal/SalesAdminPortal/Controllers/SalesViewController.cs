@@ -24,5 +24,10 @@ namespace SalesAdminPortal.Controllers
         {
             return View();
         }
+
+        public ActionResult CommissionStatusUpdate()
+        {
+            return View();
+        }
     }
 }
