@@ -115,6 +115,10 @@ namespace SalesAdminPortal.Models
         public string Name { get; set; }
 
         [Required]
+        [Display(Name = "Document Description")]
+        public string DocumentDesc { get; set; }
+
+        [Required]
         [Display(Name = "Choose Type")]
         public string DocType { get; set; }
 
