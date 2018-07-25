@@ -1,0 +1,167 @@
+﻿@using System.Configuration
+@{
+    ViewBag.Title = "Commission";
+}
+
+@Styles.Render("~/Content/jqueryui")
+@Scripts.Render("~/Scripts/jqueryui")
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-ajax-downloader@1.1.0/src/ajaxdownloader.min.js"></script>
+<script type="text/javascript">
+    //Code to call api and Display Sales Earning Monthwise
+    $(document).ready(function () {
+        $(".table-responsive").hide();
+        var dateFormat = "dd/mm/y",
+            from = $("#from")
+                .datepicker({
+                    //defaultDate: "+1w",
+                    changeMonth: true,
+                    changeYear: true,
+                    numberOfMonths: 1,
+                    dateFormat: dateFormat
+                })
+                .on("change", function () {
+                    to.datepicker("option", "minDate", getDate(this));
+                }),
+            to = $("#to").datepicker({
+                //defaultDate: "+1w",
+                changeMonth: true,
+                changeYear: true,
+                numberOfMonths: 1,
+                dateFormat: dateFormat
+            })
+                .on("change", function () {
+                    from.datepicker("option", "maxDate", getDate(this));
+                });
+
+        function getDate(element) {
+            var date;
+            try {
+                date = $.datepicker.parseDate(dateFormat, element.value);
+            } catch (error) {
+                date = null;
+            }
+
+            return date;
+        }
+
+        $("#btnPdf").click(function (evt) {
+            var url = "@ConfigurationManager.AppSettings["serviceUrl"].ToString()";
+            url = url + "api/sales/downloadpdf";
+            $.AjaxDownloader({
+                url: url,
+                data: {
+                    "StartDate": $("#from").val(),
+                    "EndDate": $("#to").val()
+                }
+            });
+        });
+
+        $("#btnReport").click(function (evt) {
+            var total = 0;
+            var paid = 0;
+            var unpaid = 0;
+
+            var url = "@ConfigurationManager.AppSettings["serviceUrl"].ToString()";
+            $.ajax({
+                type: "POST",
+                url: url + "api/sales/commissionbydate",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "StartDate": $("#from").val(),
+                    "EndDate": $("#to").val()
+                }),
+                success: function (response) {
+                    var tr_str = "";
+                    for (var j = 0; j < response.length; j++) {
+
+                        var OrderId = response[j].OrderId;
+                        var AgentCode = response[j].AgentCode;
+                        var PorpSellingPrice = response[j].PorpSellingPrice;
+                        var SaleDate = response[j].SaleDate;
+                        var Commission = response[j].Commission;
+
+                        tr_str += "<tr>" +
+                            "<td>" + (j + 1) + "</td>" +
+                            "<td>" + OrderId + "</td>" +
+                            "<td>" + AgentCode + "</td>" +
+                            "<td>" + PorpSellingPrice + "</td>" +
+                            "<td>" + SaleDate + "</td>" +
+                            "<td>" + Commission + "</td>" +
+                            "</tr>";
+                        total += parseInt(Commission);
+                        if (response[j].IsCommissionPaid == 1) {
+                            paid += parseInt(Commission);
+                        } else {
+                            unpaid += parseInt(Commission);
+                        }
+                    }
+
+                    $("#tableBody").html(tr_str);
+                    $("#totalEarning").html(total);
+                    $("#paidEarning").html(paid);
+                    $("#unpaidEarning").html(unpaid);
+                    $(".table-responsive").show();
+                }
+            });
+        });
+
+    });
+</script>
+
+<!--
+    Code to populate the text boxes and grid to display as per search record.
+-->
+<div class="table-agile-info" style="height:100%">
+    <div class="panel panel-default" style="height:80%">
+        <div class="panel-heading">
+            Commission Book
+        </div>
+        <div class="row w3-res-tb">
+            <div class="col-sm-2 m-b-xs">
+                Select Date Range:
+            </div>
+            <div class="col-sm-6 m-b-xs">
+                <label for="from">From</label>
+                <input type="text" id="from" class="input-sm form-control" name="from">
+                <label for="to">To</label>
+                <input type="text" id="to" class="input-sm form-control"  name="to">
+            </div>
+            <div class="col-sm-2 m-b-xs">
+                <br/>
+                <br/>
+                <button type="button" class="btn btn-sm btn-default" id="btnReport">Report</button>
+                <button type="button" class="btn btn-sm btn-default" id="btnPdf">Download PDF</button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table id="userTable" class="table table-striped b-t b-light">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Order Id</th>
+                        <th>Agent Code</th>
+                        <th>Selling Price</th>
+                        <th>Order Date</th>
+                        <th>Commission</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+            <div class="" style="float:right; padding-right:5px;">
+                <label for="total">Total Commission:&pound;</label>
+                <label id="totalEarning"></label>
+            </div>
+            <br/>
+            <div class="" style="float:right; padding-right:5px;">
+                <label for="total">Paid Commission:&pound;</label>
+                <label id="paidEarning"></label>
+            </div>
+            <br/>
+            <div class="" style="float:right; padding-right:5px;">
+                <label for="total">Unpaid Commission:&pound;</label>
+                <label id="unpaidEarning"></label>
+            </div>
+        </div>
+    </div>
+</div>
