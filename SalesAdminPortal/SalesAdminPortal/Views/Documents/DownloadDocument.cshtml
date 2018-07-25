@@ -11,30 +11,34 @@
             url: "@Url.Action("DocumentsList", "Documents")",
             success: function (response) {
                 var html = "";
-
                 for (var i = 0; i < response.length; i++) {
-                    html += "<option value='" + response[i] +"'> " + response[i] + "</option >";
+                    html += "<tr>" +
+                        "<td>" + response[i].DocumentName + "</td>" +
+                        "<td>" + response[i].DocumentDesc + "</td>" +
+                        "<td> <a href='#' id='" + response[i].DocumentName + "' class='btnPdf'>Download</a></td>" +
+                        "</tr>";
                 }
-                $("#drpDocuments").append(html);
+                
+                $("#tableBody").html(html);
             }
 
         });
+    });
 
-        $("#btnPdf").click(function (evt) {
+    $(document).on("click", ".btnPdf", function (evt) {
             var url = "@Url.Action("DownloadFile", "Documents")";
-
+            var docId = $(this).attr("id");
             if ($("#drpDocuments").val() != "") {
                 $.AjaxDownloader({
                     url: url,
                     data: {
-                        "fileName": $("#drpDocuments").val()
+                        "fileName": docId
                     }
                 });
             }
         });
-    });
 </script>
-<table cellspacing="10">
+@*<table cellspacing="10">
     <tr>
         <td><label class="col-md-4 control-label" style="width:160px">Document Type:</label></td>
         <td><select id="drpDocuments" style="width:200px;"><option value="">---Select---</option></select></td>
@@ -47,4 +51,24 @@
             <input type="button" id="btnPdf" class="btn btn-primary" value="Download"/>
         </td>
     </tr>
-</table>
+</table>*@
+
+<div class="table-agile-info">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Document List
+        </div>
+        <div class="table-responsive">
+            <table id="userTable" class="table table-striped b-t b-light">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Download</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>

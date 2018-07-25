@@ -30,6 +30,7 @@ namespace SalesAdminPortal.Controllers
             {
                 DocumentId = doc.DocumentId,
                 DocumentName = doc.Name,
+                DocumentDesc = doc.DocumentDesc,
                 DocType = doc.DocType
             };
 
@@ -88,7 +89,7 @@ namespace SalesAdminPortal.Controllers
         {
             using (var context = new ApplicationDbContext())
             {
-                var documents = context.Documents.Select(x => x.DocumentName).ToList();
+                var documents = context.Documents.ToList();
                 return Json(documents,JsonRequestBehavior.AllowGet);
             }
         }

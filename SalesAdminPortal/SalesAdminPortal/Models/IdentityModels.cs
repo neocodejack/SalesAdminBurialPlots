@@ -123,6 +123,9 @@ namespace SalesAdminPortal.Models
         public string DocumentName { get; set; }
 
         [Required]
+        public string DocumentDesc { get; set; }
+
+        [Required]
         public string DocType { get; set; }
 
         public string Path { get; set; }
