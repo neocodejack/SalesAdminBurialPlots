@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Web;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
@@ -20,6 +22,11 @@ namespace SalesAdminPortal.Models
         public IList<AuthenticationDescription> OtherLogins { get; set; }
     }
 
+    public class DateRange
+    {
+        public string StartDate { get; set; }
+        public string EndDate { get; set; }
+    }
     public class FactorViewModel
     {
         public string Purpose { get; set; }
@@ -83,4 +90,54 @@ namespace SalesAdminPortal.Models
         public string SelectedProvider { get; set; }
         public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
     }
+
+    public class Sale
+    {
+        [Required]
+        public string OrderId { get; set; }
+
+        [Required]
+        public string SellingPrice { get; set; }
+
+        [Required]
+        public string AgentCode { get; set; }
+
+    }
+
+    public class DocumentModel
+    {
+        [Required]
+        [Display(Name="Document Id")]
+        public int DocumentId { get; set; }
+
+        [Required]
+        [Display(Name = "Document Name")]
+        public string Name { get; set; }
+
+        [Required]
+        [Display(Name = "Document Description")]
+        public string DocumentDesc { get; set; }
+
+        [Required]
+        [Display(Name = "Choose Type")]
+        public string DocType { get; set; }
+
+        [UIHint("tinymce_full"), System.Web.Mvc.AllowHtml]
+        public string Content { get; set; }
+
+        public HttpPostedFileBase File { get; set; }
+    }
+
+    public class Feed
+    {
+        [Required]
+        [Display(Name="News Name")]
+        public string Name { get; set; }
+
+        [Required]
+        [Display(Name="News Description")]
+        [UIHint("tinymce_full"), System.Web.Mvc.AllowHtml]
+        public string Description { get; set; }
+    }
+
 }

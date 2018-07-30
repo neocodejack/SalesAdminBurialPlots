@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewBag.Title = "Create Coupon";
+}
+
+<input type="button" id="btnCoupon" name="btnCoupon" value="Generate Coupon" />
+<input type="text" id="txtGeneratedCoupon" readonly="readonly" />
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnCoupon").click(function () {
+            $.ajax({
+                type: "GET",
+                async: false,
+                url: "@Url.Action("GetCouponAsync", "Coupon")",
+                contentType: "application/json",
+                success: function (response) {
+                    $("#txtGeneratedCoupon").val(response.Result);
+                }
+            })
+        });
+    });
+
+</script>
+
