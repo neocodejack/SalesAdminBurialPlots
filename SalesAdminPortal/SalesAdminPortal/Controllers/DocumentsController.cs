@@ -93,5 +93,16 @@ namespace SalesAdminPortal.Controllers
                 return Json(documents,JsonRequestBehavior.AllowGet);
             }
         }
+
+        [HttpPost]
+        public ActionResult DeleteFile(int documentId)
+        {
+            using(var context = new ApplicationDbContext())
+            {
+                var documents = context.Documents.Where(x => x.DocumentId.Equals(documentId)).FirstOrDefault();
+                context.Documents.Remove(documents);
+                return Json(context.SaveChanges(), JsonRequestBehavior.AllowGet);
+            }
+        }
     }
 }
